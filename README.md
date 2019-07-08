@@ -9,11 +9,14 @@ Classes Required:
   DictionaryKeyValuePair.cls
    
 Optional Reference Addin:
+
   Microsoft Scripting Runtime Scripting scrrun.dll
 
 Usage:
   Dim myDictionary As IDictionary
+  
   myDictionary = Dictionary.Create
+  
   myDictionary = Dictionary.Create(IDictionaryType.ScriptingDictionary)
 
 Compiler Constants:
