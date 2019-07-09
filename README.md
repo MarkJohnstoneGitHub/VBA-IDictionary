@@ -15,9 +15,9 @@ Optional Reference Addin:
 Usage:
   Dim myDictionary As IDictionary
   
-  myDictionary = Dictionary.Create
+  Set myDictionary = Dictionary.Create
   
-  myDictionary = Dictionary.Create(IDictionaryType.ScriptingDictionary)
+  Set myDictionary = Dictionary.Create(IDictionaryType.ScriptingDictionary)
 
 Compiler Constants:
 
