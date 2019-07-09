@@ -8,9 +8,7 @@ Classes Required:
   ScriptingDictionary.cls
   DictionaryKeyValuePair.cls
    
-Optional Reference Addin:
-
-  Microsoft Scripting Runtime Scripting scrrun.dll
+Optional Reference Addin:  Microsoft Scripting Runtime Scripting scrrun.dll
 
 Usage:
 
@@ -27,4 +25,28 @@ The compiler constants may require updating to True for user requirements and pl
 
 See
 #Const SCRIPTING_REFERENCE = False
+
 #Const SCRIPTING_LATEBINDING = False
+
+For Mac:
+
+#Const SCRIPTING_REFERENCE = False
+
+#Const SCRIPTING_LATEBINDING = False
+
+For Windows:
+
+If the Microsoft Scripting Runtime Scripting is referenced:
+
+#Const SCRIPTING_REFERENCE = True
+
+If the Microsoft Scripting Runtime Scripting not referenced but wish to use it late bound:
+
+#Const SCRIPTING_REFERENCE = False
+
+#Const SCRIPTING_LATEBINDING = True
+
+
+For Mac as the Scripting.Dictionary isn't available the Dictionary.Create uses the DictionaryKeyValuePair IDictionary as an alternative. 
+
+
