@@ -48,6 +48,8 @@ If the Microsoft Scripting Runtime Scripting not referenced but wish to use it l
 #Const SCRIPTING_LATEBINDING = True
 
 
-For Mac as the Scripting.Dictionary isn't available the Dictionary.Create uses the DictionaryKeyValuePair IDictionary as an alternative. 
+For Mac as the Scripting.Dictionary isn't available the Dictionary.Create uses the DictionaryKeyValuePair as a compatible alternative. 
+
+Note: Only tested on Windows and would be appreciated if anyone can test it on the Mac platform. 
 
 
