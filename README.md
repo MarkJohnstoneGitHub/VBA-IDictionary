@@ -53,3 +53,8 @@ For Mac as the Scripting.Dictionary isn't available the Dictionary.Create uses t
 Note: Only tested on Windows and would be appreciated if anyone can test it on the Mac platform. 
 
 
+Performance.
+
+Great consideration has been given to provide as good as possible performance while using the underlying VBA.Collection.  See the Excel VBA-IDictionaryPerformance spreadhsheet for a performance comparisions of the ScriptingDictionary, DictionaryKeyValuePair and other VBA dictionary implementations. 
+
+
