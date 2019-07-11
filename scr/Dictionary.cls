@@ -7,7 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Attribute VB_Description = "IDictionary factory which is a VBA dictionary alternative for the Microsoft Scripting.Dictionary which is Mac compatible.\r\n\r\nIDictionary v1.0 (July 08, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+Attribute VB_Description = "IDictionary factory which is a VBA dictionary alternative for the Microsoft Scripting.Dictionary which is Mac compatible.\r\n\r\nIDictionary v1.1 (July 11, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
 '@PredeclaredId
 '@Folder("VBA-IDictionary")
 '@REFERENCEADDIN Microsoft Scripting Runtime Scripting scrrun.dll
@@ -120,6 +120,7 @@ End Sub
 Public Function Create(Optional ByVal dictionaryType As IDictionaryType = IDictionaryType.ScriptingDictionary, _
                        Optional ByVal compareMethod As VBA.VbCompareMethod = VBA.vbBinaryCompare, _
                        Optional ByVal encodingMethod As TextEncodingMethod = TextEncodingMethod.TextEncodingUnicode) As IDictionary
+Attribute Create.VB_Description = "Creates a IDictionary for the specified IDictionary implementation and according to the compilier constants."
     Dim result As IDictionary
     Dim dictKeyValuePair As DictionaryKeyValuePair
     Select Case dictionaryType
