@@ -7,7 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-Attribute VB_Description = "A VBA alternative for the Scripting.Dictionary which is Mac compatible using the IDictionary interface.\r\n\r\nIDictionary v1.0 (July 08, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+Attribute VB_Description = "A VBA alternative for the Scripting.Dictionary which is Mac compatible using the IDictionary interface.\r\n\r\nIDictionary v1.1 (July 11, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
 '@Folder("VBA-IDictionary")
 
 '@TODO For enumeration of the DictionaryKeyItemPair consider changing to on Keys for consistency.
@@ -354,6 +354,7 @@ End Property
 '@Description("Sets or returns the text encoding mode for encoding case senstive string keys.")
 ' ------------------------------------------------------------'
 Public Property Get TextEncodingMode() As TextEncodingMethod
+Attribute TextEncodingMode.VB_Description = "Sets or returns the text encoding mode for encoding case senstive string keys."
     TextEncodingMode = this.mTextEncodingMethod
 End Property
 ''
