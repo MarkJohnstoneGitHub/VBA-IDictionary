@@ -12,10 +12,9 @@ Attribute VB_Description = "A VBA alternative for the Scripting.Dictionary which
 
 '@TODO For enumeration of the DictionaryKeyItemPair consider changing to on Keys for consistency.
 '@TODO Or provide a property to choose what to enumerate on. i.e. Keys, Items or key,item pair
-'@TODO Consider adding a property for which String Key encoding method to use. i.e. Unicode or Ascii encoding for performance.
 
 ''
-'@Version IDictionary v1 (July 08, 2019)
+'@Version IDictionary v1.1 (July 11, 2019)
 '(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary
 '@Description A VBA alternative for the Scripting.Dictionary which is Mac compatible using the IDictionary interface.
 '@Required IDictionary.cls, DictionaryKeyValuePair.cls
@@ -25,7 +24,7 @@ Attribute VB_Description = "A VBA alternative for the Scripting.Dictionary which
 '         the Dictionary.Create function which returns a IDictionary type.
 '
 '@Author Mark Johnstone markjohnstone@hotmail.com
-'@LastModified July 08, 2019
+'@LastModified July 11, 2019
 '@Package IDictionary.cls
 '         Dictionary.cls
 '         ScriptingDictionary.cls
@@ -52,10 +51,19 @@ Attribute VB_Description = "A VBA alternative for the Scripting.Dictionary which
 '  Added support for LongLong keys which the Scripting.Dictionary doesn't support.
 '
 '  Adding large datasets i.e. 100,000+ with the Key and/or Item containing an object
-'  may result in a noticeable slo cleaning up of the dictionary when set to nothing.
+'  may result in a noticeable slow cleaning up of the dictionary when set to nothing.
 '  This may appear to the user that the application has hanged, thou infact it's performing
 '  VBA's object garbage collection.
 '  This appears to be related to the VBA's garbage collection of objects for all data structures.
+'
+'@VersionNotes IDictionary v1.1 (July 11, 2019)
+'  Added the Property TexEncodingMode
+'  Added private method BytesToAsciiHexString
+'  The default is unicode encoding. (Slower performance however should cater for most languages.)
+'  The TexEncodingMode provides the option for increased performance for the encoding of
+'  case sensItive string keys using ASCII encoding.
+'  The calling code is responsibile for ensuring ASCII compatible string keys are provided or
+'  indeterminate results may occur.
 '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 
 Option Explicit
@@ -64,6 +72,15 @@ Implements IDictionary
 '============================================='
 'Types
 '============================================='
+'List of text encoding methods available
+Public Enum TextEncodingMethod
+    TextEncodingUnicode = 0
+    TextEncodingAscii = 1
+    [_First] = TextEncodingUnicode
+    [_Last] = TextEncodingAscii
+End Enum
+
+'List of available IDictionary implementations
 Private Type TDictionaryKeyValuePair
     keyItemPairs As VBA.Collection
     compareMethod As VBA.VbCompareMethod
@@ -72,6 +89,7 @@ Private Type TDictionaryKeyValuePair
     'For increased efficiency the status for repopulating the array Keys() and Items() are used only if a change has occurred.
     updateKeys As Boolean
     updateItems As Boolean
+    mTextEncodingMethod As TextEncodingMethod 'The text encoding method used of case sensitive text keys. i.e. Unicode or Ascii
 End Type
 
 '============================================='
@@ -89,7 +107,7 @@ Const OBJECT_NOTHING_KEY As String = "2"
 Const STRING_KEY As String = "5"
 Const OBJECT_KEY As String = "6"
 Const BOOLEAN_KEY As String = "7"
-Const NUMBER_KEY As String = "9"        'reserved for vbInteger, vbLong, vbSingle, vbDouble, vbCurrency, vbByte, vbDate types
+Const NUMBER_KEY As String = "9"    'reserved for the number types: vbInteger, vbLong, vbSingle, vbDouble, vbCurrency, vbByte, vbDate types
 
 
 '============================================='
@@ -102,7 +120,8 @@ Private this As TDictionaryKeyValuePair
 '============================================='
 Private Sub Class_Initialize()
     Set this.keyItemPairs = New VBA.Collection
-    this.compareMethod = vbBinaryCompare
+    this.compareMethod = VBA.vbBinaryCompare                                'The default text comparsion method used is case sensitive.
+    this.mTextEncodingMethod = TextEncodingMethod.TextEncodingUnicode  'The default text encoding method is unicode.
     this.updateKeys = False
     this.updateItems = False
 End Sub
@@ -142,8 +161,8 @@ Attribute CompareMode.VB_Description = "Sets or returns the comparison mode for 
         VBA.Err.Raise 5 ' Invalid procedure call or argument
     Else
         If (compareMethod = vbBinaryCompare) Or _
-            (compareMethod = vbTextCompare) Or _
-            (compareMethod = vbDatabaseCompare) _
+           (compareMethod = vbTextCompare) Or _
+           (compareMethod = vbDatabaseCompare) _
         Then
             this.compareMethod = compareMethod
         Else
@@ -331,6 +350,38 @@ Attribute Key.VB_Description = "Changes the key of an existing key, value pair t
     End If
 End Property
 
+''
+'@Description("Sets or returns the text encoding mode for encoding case senstive string keys.")
+' ------------------------------------------------------------'
+Public Property Get TextEncodingMode() As TextEncodingMethod
+    TextEncodingMode = this.mTextEncodingMethod
+End Property
+''
+'@Description("Sets or returns the text encoding mode for encoding case senstive string keys.")
+'@param textEncodingMethod Value representing the text encoding method used i.e. Unicode or Ascii.
+'@Error 5  Invalid procedure call or argument.
+'          Raised for changing the  textEncodingMethod for a dictionary that contains items.
+'@Error 9  Subscript out of range.
+'          Raised for an invalid value range for textEncodingMethod.
+'@Error 13 Type Mismatch.
+'          Raised in the calling code for an invalid data type for textEncodingMethod.
+'@Remarks The text encoding mode cannot be changed once the dictionary contains items.
+' ------------------------------------------------------------'
+Public Property Let TextEncodingMode(ByVal keyEncodingMethod As TextEncodingMethod)
+    If Me.Count > 0 Then
+        ' Can't change the TextEncodingMode for a dictionary that contains data
+        VBA.Err.Raise 5 ' Invalid procedure call or argument
+    Else
+        If (keyEncodingMethod = TextEncodingMethod.TextEncodingUnicode) Or _
+           (keyEncodingMethod = TextEncodingMethod.TextEncodingAscii) _
+        Then
+            this.mTextEncodingMethod = keyEncodingMethod
+        Else
+            ' illeagal value
+            VBA.Err.Raise 9 '<- Subscript out of range
+        End If
+    End If
+End Property
 
 '============================================='
 'Public Methods
@@ -542,19 +593,23 @@ Private Function EncodeKey(ByRef Key As Variant) As String
 End Function
 
 ''
-'@Description Encodes string dictionary keys into case-senstive.
-'string collection keys using unicode hex strings.
-'@Remarks Each character is converted into four hex characters using unicode or two for ascii.
-'@param key The string key to be encoded into a case sensitive string collection key.
+'@Description Encodes string Keys into encoded string collection keys according to the CompareMode and TextEncodingMode specified.
+'@param key The string key to be encoded into a string collection key.
 '@returns String The string collection key.
+'@Remarks
+'  For case sensitive string keys each character is converted into two or four hex characters
+'  using either ascii or unicode according to the TextEncodingMode specified.
 ' ------------------------------------------------------------'
 Private Function EncodeStringKey(ByRef Key As Variant) As String
     If this.compareMethod = vbBinaryCompare Then
         'Allow for upper and lower case string keys by encoding to a Unicode hex string
         Dim bytes() As Byte
         bytes = Key  'Assign Unicode string to unicode byte array.
-        'bytes = VBA.StrConv(Key, vbFromUnicode) 'Assign Unicode string to Ascii bytes.
-        EncodeStringKey = STRING_KEY & ToHexString(bytes)     'Each character is converted into four hex characters using the unicode byte array
+        If this.mTextEncodingMethod = TextEncodingMethod.TextEncodingUnicode Then
+            EncodeStringKey = STRING_KEY & BytesToUnicodeHexString(bytes) 'Each character is converted into four hex characters.
+        Else
+            EncodeStringKey = STRING_KEY & BytesToAsciiHexString(bytes)   'Each character is converted into two hex characters.
+        End If
     Else
         EncodeStringKey = STRING_KEY & CStr(Key)
     End If
@@ -563,15 +618,30 @@ End Function
 ''
 '@Description Returns an string of unicode hex characters from a byte array.
 '@param Key The byte array to be encoded into an hex string.
-'@returns (String) Hex characters.
+'@returns (String) Unicode Hex characters.
 ' ------------------------------------------------------------'
-Private Function ToHexString(ByRef bytes() As Byte) As String
+Private Function BytesToUnicodeHexString(ByRef bytes() As Byte) As String
     Const CHAR_LENGTH As Long = 2
     'Allocate string for the required length of the hex string i.e. Each character is converted to 4 hex characters
-    ToHexString = VBA.Space$(CHAR_LENGTH * (UBound(bytes) - LBound(bytes) + 1))
+    BytesToUnicodeHexString = VBA.Space$(CHAR_LENGTH * (UBound(bytes) - LBound(bytes) + 1))
     Dim byteIndex As Long
-    For byteIndex = LBound(bytes) To UBound(bytes)
-        Mid$(ToHexString, (byteIndex * CHAR_LENGTH) + 1, CHAR_LENGTH) = VBA.Right$(VBA.Hex(256 Or bytes(byteIndex)), CHAR_LENGTH)
+    For byteIndex = 0 To UBound(bytes)
+        Mid$(BytesToUnicodeHexString, (byteIndex * CHAR_LENGTH) + 1, CHAR_LENGTH) = VBA.Right$(VBA.Hex(256 Or bytes(byteIndex)), CHAR_LENGTH)
+    Next byteIndex
+End Function
+
+''
+'@Description Returns an string of Ascii hex characters from a byte array.
+'@param Key The byte array to be encoded into an hex string.
+'@returns (String) Ascii Hex characters.
+' ------------------------------------------------------------'
+Private Function BytesToAsciiHexString(ByRef bytes() As Byte) As String
+    Const CHAR_LENGTH As Long = 2
+    'Allocate string for the required length of the hex string i.e. Each character is converted to 4 hex characters
+    BytesToAsciiHexString = VBA.Space$(CHAR_LENGTH * (UBound(bytes) - LBound(bytes) + 1))
+    Dim byteIndex As Long
+    For byteIndex = 0 To UBound(bytes) Step 2
+        Mid$(BytesToAsciiHexString, byteIndex + 1, CHAR_LENGTH) = VBA.Right$(VBA.Hex(256 Or bytes(byteIndex)), CHAR_LENGTH)
     Next byteIndex
 End Function
 
