@@ -21,7 +21,7 @@ Usage:
 Compiler Constants:
 
 Note the compiler constants in the Dictionary.cls and ScriptingDictionary.cls 
-Theses compiler constants may require updating to True for user requirements and platform.
+These compiler constants may require updating to True or False for user requirements and platform.
 
 For Mac:
 
@@ -44,11 +44,13 @@ If the Microsoft Scripting Runtime Scripting not referenced but wish to use it l
 
 For Mac as the Scripting.Dictionary isn't available the Dictionary.Create uses the DictionaryKeyValuePair as a compatible alternative. 
 
-Note: Only tested on Windows and would be appreciated if anyone can test it on the Mac platform. 
+On Windows if both compiler constants are set to False the Dictionary.Create uses the DictionaryKeyValuePair as an alternative. 
+
+Note: Only tested on Windows and would be appreciated if anyone can test it on the Mac platform. I don't anticipate any compatiblity issues if the compiler constants are appropriately set.
 
 
 Performance.
 
-Great consideration has been given to provide as good as possible performance while using the underlying VBA.Collection.  See the Excel VBA-IDictionaryPerformance spreadhsheet for a performance comparisions of the ScriptingDictionary, DictionaryKeyValuePair and other VBA dictionary implementations. 
+Great consideration has been given to provide as good as possible performance while using the underlying VBA.Collection.  See the Excel VBA-IDictionaryPerformance spreadhsheet for a performance comparisions of the ScriptingDictionary, DictionaryKeyValuePair and other VBA dictionary implementations.
 
 
