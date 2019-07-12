@@ -7,14 +7,15 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-Attribute VB_Description = "A VBA alternative for the Scripting.Dictionary which is Mac compatible using the IDictionary interface.\r\n\r\nIDictionary v1.1 (July 11, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+Attribute VB_Description = "A VBA alternative for the Scripting.Dictionary which is Mac compatible using the IDictionary interface.\r\n\r\nIDictionary v1.1 (July 12, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+'@ModuleDescription "A VBA alternative for the Scripting.Dictionary which is Mac compatible using the IDictionary interface.\r\n\r\nIDictionary v1.1 (July 12, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
 '@Folder("VBA-IDictionary")
 
 '@TODO For enumeration of the DictionaryKeyItemPair consider changing to on Keys for consistency.
-'@TODO Or provide a property to choose what to enumerate on. i.e. Keys, Items or key,item pair
+'@TODO Or provide a property to choose what to enumerate on. i.e. Keys, Items or key,value pair
 
 ''
-'@Version IDictionary v1.1 (July 11, 2019)
+'@Version IDictionary v1.1 (July 12, 2019)
 '(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary
 '@Description A VBA alternative for the Scripting.Dictionary which is Mac compatible using the IDictionary interface.
 '@Required IDictionary.cls, DictionaryKeyValuePair.cls
@@ -56,7 +57,7 @@ Attribute VB_Description = "A VBA alternative for the Scripting.Dictionary which
 '  VBA's object garbage collection.
 '  This appears to be related to the VBA's garbage collection of objects for all data structures.
 '
-'@VersionNotes IDictionary v1.1 (July 11, 2019)
+'@VersionNotes IDictionary v1.1 (July 12, 2019)
 '  Added the Property TexEncodingMode
 '  Added private method BytesToAsciiHexString
 '  The default is unicode encoding. (Slower performance however should cater for most languages.)
@@ -89,7 +90,7 @@ Private Type TDictionaryKeyValuePair
     'For increased efficiency the status for repopulating the array Keys() and Items() are used only if a change has occurred.
     updateKeys As Boolean
     updateItems As Boolean
-    mTextEncodingMethod As TextEncodingMethod 'The text encoding method used of case sensitive text keys. i.e. Unicode or Ascii
+    textKeyEncodingMethod As TextEncodingMethod 'The text encoding method used of case sensitive text keys. i.e. Unicode or Ascii
 End Type
 
 '============================================='
@@ -100,7 +101,6 @@ Const KEYVALUEPAIR_KEY = 0
 Const KEYVALUEPAIR_VALUE = 1
 
 'Used to reserve the first character of the encoded dictionary key for its data type.
-Const DATATYPE_IDENTIFIER_LENGTH = 1
 Const EMPTY_KEY As String = "0"
 Const NULL_KEY As String = "1"
 Const OBJECT_NOTHING_KEY As String = "2"
@@ -121,7 +121,7 @@ Private this As TDictionaryKeyValuePair
 Private Sub Class_Initialize()
     Set this.keyItemPairs = New VBA.Collection
     this.compareMethod = VBA.vbBinaryCompare                                'The default text comparsion method used is case sensitive.
-    this.mTextEncodingMethod = TextEncodingMethod.TextEncodingUnicode  'The default text encoding method is unicode.
+    this.textKeyEncodingMethod = TextEncodingMethod.TextEncodingUnicode  'The default text encoding method is unicode.
     this.updateKeys = False
     this.updateItems = False
 End Sub
@@ -218,7 +218,7 @@ Attribute Item.VB_UserMemId = 0
     encodedKey = EncodeKey(Key)
     'retrieving an array with key, item
     Dim keyValuePair As Variant
-    GetKeyValuePair encodedKey, keyValuePair
+    keyValuePair = GetKeyValuePair(encodedKey)
     If Not IsEmpty(keyValuePair) Then
         If IsObject(keyValuePair(KEYVALUEPAIR_VALUE)) Then
             Set Item = keyValuePair(KEYVALUEPAIR_VALUE)
@@ -226,7 +226,8 @@ Attribute Item.VB_UserMemId = 0
             Item = keyValuePair(KEYVALUEPAIR_VALUE)
         End If
     Else
-        'If key is not found when attempting to return an existing item, a new key is created and its corresponding item value is left empty.
+        'If key is not found when attempting to return an existing item,
+        'a new key is created and its corresponding item value is left empty.
         this.keyItemPairs.Add Item:=Array(Key, Empty), Key:=encodedKey
         this.updateItems = True
         this.updateKeys = True
@@ -243,7 +244,7 @@ End Property
 '@Error 450  Wrong number of arguments of invalid property assignment.
 '            Raised in calling code when an item is an object when expecting a scalar value.
 '@Remarks
-' The syntax for setting an item is: dictionaryobject.Item(key) = newItem .
+' The syntax for setting an item is: dictionaryObject.Item(key) = newItem .
 ' If you try to set item to a nonexistent key, the key is added to the dictionary,
 ' and the item is linked to it, a sort of "implicit add".
 ' The key can be scalar or an object, the item must be a scalar value.
@@ -254,14 +255,12 @@ Attribute Item.VB_Description = "Set or returns the item for a specified key."
     If Not IsObject(Item) Then
         Dim encodedKey As String
         encodedKey = EncodeKey(Key)
-        'retrieving an array with key, item
-        Dim keyValuePair As Variant
-        GetKeyValuePair encodedKey, keyValuePair
-        If IsEmpty(keyValuePair) Then
-            this.keyItemPairs.Add Item:=Array(Key, Item), Key:=encodedKey
-        Else
+        If EncodedKeyExists(encodedKey) Then
+            'Update dictionary object item for its existing associated key
             'Note When a basic data type is stored in a Collection it is read-only, to update the item require to delete then readd
             this.keyItemPairs.Remove encodedKey
+            this.keyItemPairs.Add Item:=Array(Key, Item), Key:=encodedKey
+        Else
             this.keyItemPairs.Add Item:=Array(Key, Item), Key:=encodedKey
         End If
     Else
@@ -282,31 +281,21 @@ End Property
 '@Error 424  Object required.
 '            Raised when creating a key,item pair where a item is a scalar value when expecting an object.
 '@Remarks
-' The syntax for setting an item is: Set dictionaryobject.Item(key) = newItem.
+' The syntax for setting an item is: Set dictionaryObject.Item(key) = newItem.
 ' If you try to set item to a nonexistent key, the key is added to the dictionary,
 ' and the item is linked to it, a sort of an "implicit add".
 ' ------------------------------------------------------------'
-Public Property Set Item(ByRef Key As Variant, ByRef Item As Variant)
+Public Property Set Item(ByRef Key As Variant, ByRef Item As Object)
 Attribute Item.VB_Description = "Set or returns the item for a specified key."
-    'Item must be an object value only
-    If IsObject(Item) Then
-        Dim encodedKey As String
-        encodedKey = EncodeKey(Key)
-        'retrieving an array with key, item
-        Dim keyValuePair As Variant
-        GetKeyValuePair encodedKey, keyValuePair
-        If IsEmpty(keyValuePair) Then
-            'Add new object item for its associated key to the dictionary
-            this.keyItemPairs.Add Item:=Array(Key, Item), Key:=encodedKey
-        Else
-            'Update dictionary object item for its existing associated key
-            'Note When a basic data type is stored in a Collection it is read-only, to update the item require to delete then readd
-            this.keyItemPairs.Remove encodedKey
-            this.keyItemPairs.Add Item:=Array(Key, Item), Key:=encodedKey
-        End If
+    Dim encodedKey As String
+    encodedKey = EncodeKey(Key)
+    If EncodedKeyExists(encodedKey) Then
+        'Update dictionary object item for its existing associated key
+        'Note When a basic data type is stored in a Collection it is read-only, to update the item require to delete then readd
+        this.keyItemPairs.Remove encodedKey
+        this.keyItemPairs.Add Item:=Array(Key, Item), Key:=encodedKey
     Else
-        'Raised when creating a key,item pair where a item is a scalar value when expecting an object.
-        VBA.Err.Raise 424 ' Object required.
+        this.keyItemPairs.Add Item:=Array(Key, Item), Key:=encodedKey
     End If
     this.updateItems = True
     this.updateKeys = True
@@ -329,7 +318,7 @@ Attribute Key.VB_Description = "Changes the key of an existing key, value pair t
     encodedKey = EncodeKey(Key)
     'retrieving an array with a key, item pair when the first item is the key and second is the value
     Dim keyValuePair As Variant
-    GetKeyValuePair encodedKey, keyValuePair
+    keyValuePair = GetKeyValuePair(encodedKey)
     If Not IsEmpty(keyValuePair) Then
         Dim newEncodedKey As String
         newEncodedKey = EncodeKey(newKey)
@@ -355,7 +344,7 @@ End Property
 ' ------------------------------------------------------------'
 Public Property Get TextEncodingMode() As TextEncodingMethod
 Attribute TextEncodingMode.VB_Description = "Sets or returns the text encoding mode for encoding case senstive string keys."
-    TextEncodingMode = this.mTextEncodingMethod
+    TextEncodingMode = this.textKeyEncodingMethod
 End Property
 ''
 '@Description("Sets or returns the text encoding mode for encoding case senstive string keys.")
@@ -368,15 +357,16 @@ End Property
 '          Raised in the calling code for an invalid data type for textEncodingMethod.
 '@Remarks The text encoding mode cannot be changed once the dictionary contains items.
 ' ------------------------------------------------------------'
-Public Property Let TextEncodingMode(ByVal keyEncodingMethod As TextEncodingMethod)
+Public Property Let TextEncodingMode(ByVal encodingMethod As TextEncodingMethod)
+Attribute TextEncodingMode.VB_Description = "Sets or returns the text encoding mode for encoding case senstive string keys."
     If Me.Count > 0 Then
         ' Can't change the TextEncodingMode for a dictionary that contains data
         VBA.Err.Raise 5 ' Invalid procedure call or argument
     Else
-        If (keyEncodingMethod = TextEncodingMethod.TextEncodingUnicode) Or _
-           (keyEncodingMethod = TextEncodingMethod.TextEncodingAscii) _
+        If (encodingMethod = TextEncodingMethod.TextEncodingUnicode) Or _
+           (encodingMethod = TextEncodingMethod.TextEncodingAscii) _
         Then
-            this.mTextEncodingMethod = keyEncodingMethod
+            this.textKeyEncodingMethod = encodingMethod
         Else
             ' illeagal value
             VBA.Err.Raise 9 '<- Subscript out of range
@@ -478,7 +468,6 @@ Attribute Keys.VB_Description = "Returns an array of all keys in the dictionary.
                 End If
                 keysIndex = keysIndex + 1
             Next keyValuePair
-            
         End If
         Keys = this.keyList
     Else
@@ -521,30 +510,14 @@ End Sub
 '============================================='
 
 ''
-'@Description Returns True if a specified key exists in the collection object; False if it does not.
-'@param encodedKey Endcoded string key value being searched for in the collection object.
-'@returns (Boolean) True if a specified key exists in the collection object.
-' ------------------------------------------------------------'
-Private Function EncodedKeyExists(ByRef encodedKey As String) As Boolean
-    On Error GoTo ErrorHandler
-    this.keyItemPairs.Item encodedKey
-    EncodedKeyExists = True
-CleanExit:
-    Exit Function
-ErrorHandler:
-    EncodedKeyExists = False
-    Err.Clear 'reset error trapping.
-    Resume CleanExit
-End Function
-
-''
 '@Description Returns a string collection key for a variant dictionary key.
 '@param key The key to be encoded into a string collection key.
 '@returns (String) The encoded string collection key.
 '@Error 5     Invalid procedure call or argument.
 '             Raised for arrays or an unsupported data type for a key.
 '@Error 457   This key is already associated with an element of this collection.
-'             Attempting to add dictionary keys of different numeric data types with the same value results in Error 457.
+'             Attempting to add dictionary keys of different numeric data types
+'             with the same value results in Error 457.
 '@Remarks
 '  The encoded string key consists of the following:
 '  a) First character reserved to represent its data type.
@@ -594,7 +567,8 @@ Private Function EncodeKey(ByRef Key As Variant) As String
 End Function
 
 ''
-'@Description Encodes string Keys into encoded string collection keys according to the CompareMode and TextEncodingMode specified.
+'@Description Encodes string Keys into encoded string collection keys according
+'             to the CompareMode and TextEncodingMode specified.
 '@param key The string key to be encoded into a string collection key.
 '@returns String The string collection key.
 '@Remarks
@@ -606,7 +580,7 @@ Private Function EncodeStringKey(ByRef Key As Variant) As String
         'Allow for upper and lower case string keys by encoding to a Unicode hex string
         Dim bytes() As Byte
         bytes = Key  'Assign Unicode string to unicode byte array.
-        If this.mTextEncodingMethod = TextEncodingMethod.TextEncodingUnicode Then
+        If this.textKeyEncodingMethod = TextEncodingMethod.TextEncodingUnicode Then
             EncodeStringKey = STRING_KEY & BytesToUnicodeHexString(bytes) 'Each character is converted into four hex characters.
         Else
             EncodeStringKey = STRING_KEY & BytesToAsciiHexString(bytes)   'Each character is converted into two hex characters.
@@ -647,13 +621,29 @@ Private Function BytesToAsciiHexString(ByRef bytes() As Byte) As String
 End Function
 
 ''
-'@Description Returns the key item pair for its associated key. If not found returns nothing.
-'@param encodedKey      Endcoded string key value being searched for in the collection object.
-'@param outKeyValuePair The key, value pair in variant array format for the associated key
+'@Description Returns True if a specified key exists in the collection object; False if it does not.
+'@param encodedKey Endcoded string key value being searched for in the collection object.
+'@returns (Boolean) True if a specified key exists in the collection object.
 ' ------------------------------------------------------------'
-Private Function GetKeyValuePair(ByRef encodedKey As String, ByRef outKeyValuePair As Variant)
+Private Function EncodedKeyExists(ByRef encodedKey As String) As Boolean
     On Error GoTo ErrorHandler
-    outKeyValuePair = this.keyItemPairs.Item(encodedKey)
+    this.keyItemPairs.Item encodedKey
+    EncodedKeyExists = True
+CleanExit:
+    Exit Function
+ErrorHandler:
+    EncodedKeyExists = False
+    Err.Clear 'reset error trapping.
+    Resume CleanExit
+End Function
+
+''
+'@Description Returns the key item pair for its associated key.
+'@param encodedKey  Endcoded string key value being searched for in the collection object.
+'@returns (Variant) Variant array containing the key, value pair for the specified key
+Private Function GetKeyValuePair(ByRef encodedKey As String) As Variant
+    On Error GoTo ErrorHandler
+    GetKeyValuePair = this.keyItemPairs.Item(encodedKey)
 CleanExit:
     Exit Function
 ErrorHandler:
@@ -713,7 +703,7 @@ End Property
 Private Property Let IDictionary_Item(ByRef Key As Variant, ByRef Item As Variant)
     Me.Item(Key) = Item
 End Property
-Private Property Set IDictionary_Item(ByRef Key As Variant, ByRef Item As Variant)
+Private Property Set IDictionary_Item(ByRef Key As Variant, ByRef Item As Object)
     Set Me.Item(Key) = Item
 End Property
 

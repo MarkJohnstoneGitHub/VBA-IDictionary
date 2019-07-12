@@ -7,15 +7,16 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-Attribute VB_Description = "The IDictionary interface used for dictionary implementations.\r\n\r\nIDictionary v1.0 (July 08, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+Attribute VB_Description = "The IDictionary interface used for dictionary implementations.\r\n\r\nIDictionary v1.1 (July 12, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+'@ModuleDescription "The IDictionary interface used for dictionary implementations.\r\n\r\nIDictionary v1.1 (July 12, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
 '@Folder("VBA-IDictionary")
 
 ''
-'@Version IDictionary v1 (July 08, 2019)
+'@Version IDictionary v1.1 (July 12, 2019)
 '(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary
 '@Description The IDictionary interface used for dictionary implementations.
 '@Author Mark Johnstone markjohnstone@hotmail.com
-'@LastModified July 08, 2019
+'@LastModified July 12, 2019
 '@Package IDictionary.cls
 '         Dictionary.cls
 '         ScriptingDictionary.cls
@@ -34,7 +35,11 @@ Option Explicit
 Public Property Get CompareMode() As VBA.VbCompareMethod
 Attribute CompareMode.VB_Description = "Sets or returns the comparison mode for comparing string keys."
 End Property
+''
+'@Description("Sets or returns the comparison mode for comparing string keys.")
+'------------------------------------------------------------'
 Public Property Let CompareMode(ByVal compareMethod As VBA.VbCompareMethod)
+Attribute CompareMode.VB_Description = "Sets or returns the comparison mode for comparing string keys."
 End Property
 
 ''
@@ -69,13 +74,25 @@ Public Property Get Item(ByRef Key As Variant) As Variant
 Attribute Item.VB_Description = "Set or returns the item for a specified key."
 Attribute Item.VB_UserMemId = 0
 End Property
+''
+'@DefaultMember
+'@Description("Set or returns the item for a specified key.")
+'------------------------------------------------------------'
 Public Property Let Item(ByRef Key As Variant, ByRef Item As Variant)
+Attribute Item.VB_Description = "Set or returns the item for a specified key."
+Attribute Item.VB_UserMemId = 0
 End Property
-Public Property Set Item(ByRef Key As Variant, ByRef Item As Variant)
+''
+'@DefaultMember
+'@Description("Set or returns the item for a specified key.")
+'------------------------------------------------------------'
+Public Property Set Item(ByRef Key As Variant, ByRef Item As Object)
+Attribute Item.VB_Description = "Set or returns the item for a specified key."
+Attribute Item.VB_UserMemId = 0
 End Property
 
 ''
-'@Description("Changes the key of an existing key,value pair to a new key value.")
+'@Description("Changes the key of an existing key, value pair to a new key value.")
 '------------------------------------------------------------'
 Public Property Let Key(ByRef Key As Variant, ByRef newKey As Variant)
 Attribute Key.VB_Description = "Changes the key of an existing key, value pair to a new key value."

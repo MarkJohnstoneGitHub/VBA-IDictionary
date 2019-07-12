@@ -7,15 +7,18 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-Attribute VB_Description = "A VBA wrapper for the Microsoft Scripting.Dictionary, scrrun.dll library, implementing an IDictionary interface.\r\n\r\nIDictionary v1.0 (July 08, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+Attribute VB_Description = "A VBA wrapper for the Microsoft Scripting.Dictionary, scrrun.dll library, implementing an IDictionary interface.\r\n\r\nIDictionary v1.1 (July 12, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+'@ModuleDescription "A VBA wrapper for the Microsoft Scripting.Dictionary, scrrun.dll library, implementing an IDictionary interface.\r\n\r\nIDictionary v1.1 (July 12, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
 '@Folder("VBA-IDictionary")
 '@REFERENCEADDIN Microsoft Scripting Runtime Scripting scrrun.dll
 
-'@Version IDictionary v1 (July 08, 2019)
+'@Version IDictionary v1.1 (July 12, 2019)
 '(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary
 '@Description A VBA wrapper for the Microsoft Scripting.Dictionary, scrrun.dll library
+'@Dependencies IDictionary.cls, ScriptingDictionary.cls
+'              Optional: Reference addin Microsoft Scripting Runtime Scripting, scrrun.dll dependant on compiler constant settings.
 '@Author Mark Johnstone markjohnstone@hotmail.com
-'@LastModified July 08, 2019
+'@LastModified July 12, 2019
 '@Package IDictionary.cls
 '         Dictionary.cls
 '         ScriptingDictionary.cls
@@ -55,12 +58,12 @@ Implements IDictionary
 '============================================='
 #If Not Mac And SCRIPTING_REFERENCE Then
     Private Type TScriptingDictionary
-        mDictionary As Scripting.Dictionary
+        scriptDictionary As Scripting.Dictionary
     End Type
 
 #ElseIf Not Mac And SCRIPTING_LATEBINDING Then
     Private Type TScriptingDictionary
-        mDictionary As Object
+        scriptDictionary As Object
     End Type
 #End If
 
@@ -87,9 +90,9 @@ Const SCRIPTING_DICTIONARY As String = "Scripting.Dictionary"
 '            It can also be raised for late binding where the call to CreateObject fails.
 Private Sub Class_Initialize()
 #If Not Mac And SCRIPTING_REFERENCE Then
-    Set this.mDictionary = New Scripting.Dictionary
+    Set this.scriptDictionary = New Scripting.Dictionary
 #ElseIf Not Mac And SCRIPTING_LATEBINDING Then
-    Set this.mDictionary = CreateObject(SCRIPTING_DICTIONARY)
+    Set this.scriptDictionary = CreateObject(SCRIPTING_DICTIONARY)
 #Else
     VBA.Err.Raise 429 'Cannot create object as Scripting.Dictionary is not available."
 #End If
@@ -97,7 +100,7 @@ End Sub
 
 Private Sub Class_Terminate()
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    Set this.mDictionary = Nothing
+    Set this.scriptDictionary = Nothing
 #End If
 End Sub
 
@@ -111,12 +114,12 @@ End Sub
 Public Property Get CompareMode() As VBA.VbCompareMethod
 Attribute CompareMode.VB_Description = "Sets or returns the comparison mode for comparing keys in a Dictionary object."
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    CompareMode = this.mDictionary.CompareMode
+    CompareMode = this.scriptDictionary.CompareMode
 #End If
 End Property
 
 ''
-'@Description Sets the comparison mode for comparing keys in a Dictionary object
+'@Description("Sets the comparison mode for comparing keys in a Dictionary object.")
 '@param compareMethod Value representing the comparison mode used by functions such as StrComp.
 '@Error 5 Invalid procedure call or argument
 '         Raised for an invalid data type for compareMethod.
@@ -125,8 +128,9 @@ End Property
 '@Remarks The comparison mode cannot be changed once the dictionary contains items
 '------------------------------------------------------------'
 Public Property Let CompareMode(ByVal compareMethod As VBA.VbCompareMethod)
+Attribute CompareMode.VB_Description = "Sets the comparison mode for comparing keys in a Dictionary object."
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    this.mDictionary.CompareMode = compareMethod
+    this.scriptDictionary.CompareMode = compareMethod
 #End If
 End Property
 
@@ -135,7 +139,7 @@ End Property
 Public Property Get Count() As Long
 Attribute Count.VB_Description = "Returns the number of key, item pairs in a Dictionary object."
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    Count = this.mDictionary.Count
+    Count = this.scriptDictionary.Count
 #End If
 End Property
 
@@ -146,10 +150,11 @@ End Property
 '         Attribute NewEnum.VB_MemberFlags = "40" declares NewEnum as a hidden property.
 ' ------------------------------------------------------------'
 Public Property Get NewEnum() As IUnknown
+Attribute NewEnum.VB_Description = "Enumerator for dictionary which returns dictionary keys."
 Attribute NewEnum.VB_UserMemId = -4
 Attribute NewEnum.VB_MemberFlags = "40"
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    Set NewEnum = this.mDictionary.Keys.[_NewEnum]
+    Set NewEnum = this.scriptDictionary.Keys.[_NewEnum]
 #End If
 End Property
 
@@ -170,7 +175,7 @@ Attribute Item.VB_Description = "Sets or returns the value of an item in a Dicti
 Attribute Item.VB_UserMemId = 0
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
     Dim result As Variant
-    result = Array(this.mDictionary.Item(Key)) 'The get Item property result is wrapped in the Array to avoid running twice
+    result = Array(this.scriptDictionary.Item(Key)) 'The get Item property result is wrapped in the Array to avoid running twice
     If VBA.IsObject(result(0)) Then
         Set Item = result(0)
     Else
@@ -178,8 +183,8 @@ Attribute Item.VB_UserMemId = 0
     End If
 #End If
 End Property
-
 ''
+'@DefaultMember
 '@Description Sets a scalar item value for a specified key in a Dictionary object
 '@param key  The key associated with the item being retrieved or added.
 '@param Item The new value associated with the specified key
@@ -193,12 +198,14 @@ End Property
 ' and the item is linked to it, a sort of "implicit add."
 '------------------------------------------------------------'
 Public Property Let Item(ByRef Key As Variant, ByRef Item As Variant)
+Attribute Item.VB_Description = "Sets or returns the value of an item in a Dictionary object."
+Attribute Item.VB_UserMemId = 0
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    this.mDictionary.Item(Key) = Item
+    this.scriptDictionary.Item(Key) = Item
 #End If
 End Property
-
 ''
+'@DefaultMember
 '@Description Sets the object value of an item in a Dictionary object.
 '@param key  Key associated with the item being retrieved or added.
 '@param Item The new value associated with the specified key
@@ -211,9 +218,11 @@ End Property
 ' If you try to set item to a nonexistent key, the key is added to the dictionary,
 ' and the item is linked to it, a sort of an "implicit add."
 '------------------------------------------------------------'
-Public Property Set Item(ByRef Key As Variant, ByRef Item As Variant)
+Public Property Set Item(ByRef Key As Variant, ByRef Item As Object)
+Attribute Item.VB_Description = "Sets or returns the value of an item in a Dictionary object."
+Attribute Item.VB_UserMemId = 0
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    Set this.mDictionary.Item(Key) = Item
+    Set this.scriptDictionary.Item(Key) = Item
 #End If
 End Property
 
@@ -231,7 +240,7 @@ End Property
 Public Property Let Key(ByRef Key As Variant, ByRef newKey As Variant)
 Attribute Key.VB_Description = "Sets a new key for an existing key in a Dictionary object."
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    this.mDictionary.Key(Key) = newKey
+    this.scriptDictionary.Key(Key) = newKey
 #End If
 End Property
 
@@ -250,7 +259,7 @@ End Property
 Public Sub Add(ByRef Key As Variant, ByRef Item As Variant)
 Attribute Add.VB_Description = "Adds a key and item pair to a Dictionary object."
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    this.mDictionary.Add Key, Item
+    this.scriptDictionary.Add Key, Item
 #End If
 End Sub
 
@@ -264,7 +273,7 @@ End Sub
 Public Function Exists(ByRef Key As Variant) As Boolean
 Attribute Exists.VB_Description = "Returns True if a specified key exists in the Dictionary object; False if it does not."
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    Exists = this.mDictionary.Exists(Key)
+    Exists = this.scriptDictionary.Exists(Key)
 #End If
 End Function
 
@@ -275,7 +284,7 @@ End Function
 Public Function Items() As Variant
 Attribute Items.VB_Description = "Returns an array of items in a dictionary object."
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    Items = this.mDictionary.Items
+    Items = this.scriptDictionary.Items
 #End If
 End Function
 
@@ -286,7 +295,7 @@ End Function
 Public Function Keys() As Variant
 Attribute Keys.VB_Description = "Returns an array of all the keys in a dictionary object."
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    Keys = this.mDictionary.Keys
+    Keys = this.scriptDictionary.Keys
 #End If
 End Function
 
@@ -299,7 +308,7 @@ End Function
 Public Sub Remove(ByRef Key As Variant)
 Attribute Remove.VB_Description = "Removes a key, item pair from a Dictionary object."
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    this.mDictionary.Remove Key
+    this.scriptDictionary.Remove Key
 #End If
 End Sub
 
@@ -309,7 +318,7 @@ End Sub
 Public Sub RemoveAll()
 Attribute RemoveAll.VB_Description = "Removes all key, item pairs from a Dictionary object."
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    this.mDictionary.RemoveAll
+    this.scriptDictionary.RemoveAll
 #End If
 End Sub
 
@@ -322,18 +331,18 @@ End Sub
 '------------------------------------------------------------'
 Private Property Get IDictionary_CompareMode() As VBA.VbCompareMethod
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    IDictionary_CompareMode = this.mDictionary.CompareMode
+    IDictionary_CompareMode = this.scriptDictionary.CompareMode
 #End If
 End Property
 Private Property Let IDictionary_CompareMode(ByVal compareMethod As VBA.VbCompareMethod)
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    this.mDictionary.CompareMode = compareMethod
+    this.scriptDictionary.CompareMode = compareMethod
 #End If
 End Property
 
 Private Property Get IDictionary_Count() As Long
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    IDictionary_Count = this.mDictionary.Count
+    IDictionary_Count = this.scriptDictionary.Count
 #End If
 End Property
 
@@ -346,7 +355,7 @@ End Property
 Private Property Get IDictionary_Item(ByRef Key As Variant) As Variant
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
     Dim result As Variant
-    result = Array(this.mDictionary.Item(Key)) 'The get Item property result is wrapped in the Array to avoid running twice
+    result = Array(this.scriptDictionary.Item(Key)) 'The get Item property result is wrapped in the Array to avoid running twice
     If IsObject(result(0)) Then
         Set IDictionary_Item = result(0)
     Else
@@ -356,18 +365,18 @@ Private Property Get IDictionary_Item(ByRef Key As Variant) As Variant
 End Property
 Private Property Let IDictionary_Item(ByRef Key As Variant, ByRef Item As Variant)
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    this.mDictionary.Item(Key) = Item
+    this.scriptDictionary.Item(Key) = Item
 #End If
 End Property
-Private Property Set IDictionary_Item(ByRef Key As Variant, ByRef Item As Variant)
+Private Property Set IDictionary_Item(ByRef Key As Variant, ByRef Item As Object)
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    Set this.mDictionary.Item(Key) = Item
+    Set this.scriptDictionary.Item(Key) = Item
 #End If
 End Property
 
 Private Property Let IDictionary_Key(ByRef Key As Variant, ByRef newKey As Variant)
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    this.mDictionary.Key(Key) = newKey
+    this.scriptDictionary.Key(Key) = newKey
 #End If
 End Property
 
@@ -376,37 +385,37 @@ End Property
 '------------------------------------------------------------'
 Private Sub IDictionary_Add(ByRef Key As Variant, ByRef Item As Variant)
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    this.mDictionary.Add Key, Item
+    this.scriptDictionary.Add Key, Item
 #End If
 End Sub
 
 Private Function IDictionary_Exists(ByRef Key As Variant) As Boolean
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    IDictionary_Exists = this.mDictionary.Exists(Key)
+    IDictionary_Exists = this.scriptDictionary.Exists(Key)
 #End If
 End Function
 
 Private Function IDictionary_Items() As Variant
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    IDictionary_Items = this.mDictionary.Items
+    IDictionary_Items = this.scriptDictionary.Items
 #End If
 End Function
 
 Private Function IDictionary_Keys() As Variant
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    IDictionary_Keys = this.mDictionary.Keys
+    IDictionary_Keys = this.scriptDictionary.Keys
 #End If
 End Function
 
 Private Sub IDictionary_Remove(Key As Variant)
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    this.mDictionary.Remove Key
+    this.scriptDictionary.Remove Key
 #End If
 End Sub
 
 Private Sub IDictionary_RemoveAll()
 #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-    this.mDictionary.RemoveAll
+    this.scriptDictionary.RemoveAll
 #End If
 End Sub
 

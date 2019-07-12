@@ -7,18 +7,19 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Attribute VB_Description = "IDictionary factory which is a VBA dictionary alternative for the Microsoft Scripting.Dictionary which is Mac compatible.\r\n\r\nIDictionary v1.1 (July 11, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+Attribute VB_Description = "IDictionary factory which is a VBA dictionary alternative for the Microsoft Scripting.Dictionary which is Mac compatible.\r\n\r\nIDictionary v1.1 (July 12, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+'@ModuleDescription "IDictionary factory which is a VBA dictionary alternative for the Microsoft Scripting.Dictionary which is Mac compatible.\r\n\r\nIDictionary v1.1 (July 12, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
 '@PredeclaredId
 '@Folder("VBA-IDictionary")
 '@REFERENCEADDIN Microsoft Scripting Runtime Scripting scrrun.dll
 
 ''
-'@Version IDictionary v1.1 (July 11, 2019)
+'@Version IDictionary v1.1 (July 12, 2019)
 '(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary
 '@Description IDictionary factory which is a VBA dictionary alternative for the Microsoft Scripting.Dictionary which is Mac compatible.
 '@Author markjohnstone@hotmail.com
-'@LastModified July 11, 2019
-'@Dependencies IDictionary.cls, Dictionary.cls, DictionaryKeyValuePair.cls, ScriptingDictionary.cls
+'@LastModified July 12, 2019
+'@Dependencies ("IDictionary.cls, Dictionary.cls, DictionaryKeyValuePair.cls, ScriptingDictionary.cls")
 '              Optional: Reference addin Microsoft Scripting Runtime Scripting, scrrun.dll dependant on compiler constant settings.
 '@Package IDictionary.cls
 '         Dictionary.cls
@@ -52,7 +53,7 @@ Attribute VB_Description = "IDictionary factory which is a VBA dictionary altern
 '
 '  For the Mac the DictionaryKeyValuePair will be used as an alternative dictionary.
 '
-'@VersionNotes IDictionary v1.1 (July 11, 2019)
+'@VersionNotes IDictionary v1.1 (July 12, 2019)
 ' Modified the method Create adding optional parameters, compareMethod and text encodingMethod.
 ' The text encoding parameter provides the option for increased performance for the encoding of
 ' case sensitive string keys, using ASCII encoding.
@@ -67,8 +68,8 @@ Option Explicit
 'Compiler Constants
 '============================================='
 '@CompilerConstants
-#Const SCRIPTING_REFERENCE = False
-#Const SCRIPTING_LATEBINDING = False
+#Const SCRIPTING_REFERENCE = True
+#Const SCRIPTING_LATEBINDING = True
 
 '============================================='
 'Types
@@ -77,7 +78,7 @@ Option Explicit
 'List of available IDictionary implementations
 Public Enum IDictionaryType
     ScriptingDictionary = 0
-    DictionaryKeyValuePair = 2
+    DictionaryKeyValuePair = 1
     [_First] = ScriptingDictionary
     [_Last] = DictionaryKeyValuePair
 End Enum
@@ -101,8 +102,8 @@ End Sub
 
 ''
 '@Description("Creates a IDictionary for the specified IDictionary implementation and according to the compilier constants.")
-'@param dictionaryType     (Optional) The dictionary implementation specified to implement a IDictionary, default is ScriptingDictionary.
-'@param compareMethod      (Optional) The comparison mode for comparing string keys in a Dictionary object, default is vbBinaryCompare.
+'@param dictionaryType (Optional) The dictionary implementation specified to implement a IDictionary, default is ScriptingDictionary.
+'@param compareMethod  (Optional) The comparison mode for comparing string keys in a Dictionary object, default is vbBinaryCompare.
 '@param encodingMethod (Optional) The encoding mode (unicode or ascii) for case senstive keys, default is TextEncodingUnicode.
 '@return (IDictionary)
 '@Error 9  Subscript out of range.
@@ -112,37 +113,74 @@ End Sub
 '@Error 13 Type Mismatch.
 '          Raised in the calling code for an invalid data type for the the following: dictionaryType , compareMethod, encodingMethod
 '@Remarks
-' If Mac or the Scripting.Dictionary isn't referenced or not available for late binding the DictionaryKeyValuePair
-' is used as the alternative compatible dictionary.
+' The alternative compatible IDictionary used is DictionaryKeyValuePair.
+' Unless invalid parameters are supplied a IDictionary will be returned even if the Scripting.Dictionary reference
+' is broken or the compiler constants, SCRIPTING_REFERENCE and SCRIPTING_LATEBINDING are both set to false.
+' I.e. If Mac or the Scripting.Dictionary isn't referenced, broken link or not available for late binding the alternative
+' DictionaryKeyValuePair is used.
+'
 ' The encodingMethod is only applicable to DictionaryKeyValuePair, and only can be changed through this create method or
 ' when cast the IDictionary to a DictionaryKeyValuePair object before items are added to the dictionary.
 '------------------------------------------------------------'
 Public Function Create(Optional ByVal dictionaryType As IDictionaryType = IDictionaryType.ScriptingDictionary, _
                        Optional ByVal compareMethod As VBA.VbCompareMethod = VBA.vbBinaryCompare, _
-                       Optional ByVal encodingMethod As TextEncodingMethod = TextEncodingMethod.TextEncodingUnicode) As IDictionary
+                       Optional ByVal encodingMethod As TextEncodingMethod = TextEncodingMethod.TextEncodingUnicode) _
+                       As IDictionary
 Attribute Create.VB_Description = "Creates a IDictionary for the specified IDictionary implementation and according to the compilier constants."
+    On Error GoTo ErrorHandler
     Dim result As IDictionary
-    Dim dictKeyValuePair As DictionaryKeyValuePair
     Select Case dictionaryType
         Case IDictionaryType.ScriptingDictionary
             #If Not Mac And (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
                 Set result = New ScriptingDictionary
                 result.CompareMode = compareMethod
             #ElseIf Mac Or Not (SCRIPTING_REFERENCE Or SCRIPTING_LATEBINDING) Then
-                Set dictKeyValuePair = New DictionaryKeyValuePair
-                dictKeyValuePair.CompareMode = compareMethod
-                dictKeyValuePair.TextEncodingMode = encodingMethod
-                Set result = dictKeyValuePair
+                Set result = CreateDictionaryKeyValuePair(compareMethod, encodingMethod)
+            #Else
+                Set result = CreateDictionaryKeyValuePair(compareMethod, encodingMethod)
             #End If
         Case IDictionaryType.DictionaryKeyValuePair
-                Set dictKeyValuePair = New DictionaryKeyValuePair
-                dictKeyValuePair.CompareMode = compareMethod
-                dictKeyValuePair.TextEncodingMode = encodingMethod
-                Set result = dictKeyValuePair
+                Set result = CreateDictionaryKeyValuePair(compareMethod, encodingMethod)
         Case Else
             ' illeagal value
             VBA.Err.Raise 9 '<- Subscript out of range
     End Select
+CleanExit:
     Set Create = result
+    Exit Function
+ErrorHandler:
+    On Error GoTo 0 'Disable any previous VBA error handling
+    'Run-time error '429': ActiveX component can't create object
+    If Err.Number = 429 Then
+        Err.Clear 'reset error trapping.
+        'Use DictionaryKeyValuePair as the alternative IDictionary implemenation
+        Set result = CreateDictionaryKeyValuePair(compareMethod, encodingMethod)
+    Else
+        'Bubble up any other errors
+        Err.Raise Err.Number, Err.Source, Err.Description
+    End If
+    Resume CleanExit
 End Function
+
+''
+'@Description Creates a IDictionary for a DictionaryKeyValuePair.
+'@param compareMethod  The comparison mode for comparing string keys in a Dictionary object, default is vbBinaryCompare.
+'@param encodingMethod The encoding mode (unicode or ascii) for case senstive keys, default is TextEncodingUnicode.
+'@return (IDictionary)
+Private Function CreateDictionaryKeyValuePair( _
+                    ByVal compareMethod As VBA.VbCompareMethod, _
+                    ByVal encodingMethod As TextEncodingMethod) _
+                    As IDictionary
+    Dim dictKeyValuePair As DictionaryKeyValuePair
+    Set dictKeyValuePair = New DictionaryKeyValuePair
+    dictKeyValuePair.CompareMode = compareMethod
+    dictKeyValuePair.TextEncodingMode = encodingMethod
+    Set CreateDictionaryKeyValuePair = dictKeyValuePair
+End Function
+
+
+
+
+
+
 
