@@ -97,7 +97,7 @@ Private Type TDictionaryKeyValuePair
     'For increased efficiency the status for repopulating the array Keys() and Items() are used only if a change has occurred.
     updateKeys As Boolean
     updateItems As Boolean
-    textKeyEncodingMethod As TextEncodingMethod 'The text encoding method used of case sensitive text keys. i.e. Unicode or Ascii
+    textKeyEncodingMethod As TextEncodingMethod  'The text encoding method used of case sensitive text keys. i.e. Unicode or Ascii
 End Type
 
 '============================================='
@@ -114,7 +114,7 @@ Const OBJECT_NOTHING_KEY As String = "2"
 Const STRING_KEY As String = "5"
 Const OBJECT_KEY As String = "6"
 Const BOOLEAN_KEY As String = "7"
-Const NUMBER_KEY As String = "9"    'reserved for the number types: vbInteger, vbLong, vbSingle, vbDouble, vbCurrency, vbByte, vbDate types
+Const NUMBER_KEY As String = "9"                 'reserved for the number types: vbInteger, vbLong, vbSingle, vbDouble, vbCurrency, vbByte, vbDate types
 
 '============================================='
 'Private Variables
@@ -126,8 +126,8 @@ Private this As TDictionaryKeyValuePair
 '============================================='
 Private Sub Class_Initialize()
     Set this.keyItemPairs = New VBA.Collection
-    this.compareMethod = VBA.vbBinaryCompare                    'The default text comparsion method used is case sensitive.
-    this.textKeyEncodingMethod = TextEncodingMethod.temUnicode  'The default text encoding method is unicode.
+    this.compareMethod = VBA.vbBinaryCompare     'The default text comparsion method used is case sensitive.
+    this.textKeyEncodingMethod = TextEncodingMethod.temUnicode 'The default text encoding method is unicode.
     this.updateKeys = False
     this.updateItems = False
 End Sub
@@ -144,7 +144,6 @@ End Sub
 '@Description("Sets or returns the comparison mode for comparing string keys.")
 ' ------------------------------------------------------------'
 Public Property Get CompareMode() As VBA.VbCompareMethod
-Attribute CompareMode.VB_Description = "Sets or returns the comparison mode for comparing string keys."
     CompareMode = this.compareMethod
 End Property
 
@@ -160,20 +159,19 @@ End Property
 '@Remarks The comparison mode cannot be changed once the dictionary contains items.
 ' ------------------------------------------------------------'
 Public Property Let CompareMode(ByVal compareMethod As VBA.VbCompareMethod)
-Attribute CompareMode.VB_Description = "Sets or returns the comparison mode for comparing string keys."
     If Me.Count > 0 Then
         ' Can't change the CompareMode for a dictionary that contains data
         ' http://msdn.microsoft.com/en-us/library/office/gg278481(v=office.15).aspx
-        VBA.Err.Raise 5 ' Invalid procedure call or argument
+        VBA.Err.Raise 5                          ' Invalid procedure call or argument
     Else
         If (compareMethod = VBA.vbBinaryCompare) Or _
-           (compareMethod = VBA.vbTextCompare) Or _
-           (compareMethod = VBA.vbDatabaseCompare) _
-        Then
+                                                 (compareMethod = VBA.vbTextCompare) Or _
+                                                 (compareMethod = VBA.vbDatabaseCompare) _
+                                                 Then
             this.compareMethod = compareMethod
         Else
             ' illeagal value
-            VBA.Err.Raise 9 '<- Subscript out of range
+            VBA.Err.Raise 9                      '<- Subscript out of range
         End If
     End If
 End Property
@@ -182,8 +180,7 @@ End Property
 '@Description("Returns the number of key, item pairs in a Dictionary object.")
 ' ------------------------------------------------------------'
 Public Property Get Count() As Long
-Attribute Count.VB_Description = "Returns the number of key, item pairs in a Dictionary object."
-   Count = this.keyItemPairs.Count
+    Count = this.keyItemPairs.Count
 End Property
 
 ''
@@ -193,9 +190,6 @@ End Property
 '         Attribute NewEnum.VB_MemberFlags = "40" declares NewEnum as a hidden property.
 ' ------------------------------------------------------------'
 Public Property Get NewEnum() As IUnknown
-Attribute NewEnum.VB_Description = "Enumerator for dictionary which returns a one dimensional variant array of a key,item pair."
-Attribute NewEnum.VB_UserMemId = -4
-Attribute NewEnum.VB_MemberFlags = "40"
     Set NewEnum = this.keyItemPairs.[_NewEnum]
 End Property
 
@@ -218,18 +212,16 @@ End Property
 '  Attribute Item.VB_UserMemId = 0 Declares property Item as the default property.
 ' ------------------------------------------------------------'
 Public Property Get Item(ByRef Key As Variant) As Variant
-Attribute Item.VB_Description = "Set or returns the item for a specified key."
-Attribute Item.VB_UserMemId = 0
     Dim encodedKey As String
     encodedKey = EncodeKey(Key)
     'retrieving an array with key, item
-    Dim KeyValuePair As Variant
-    KeyValuePair = GetKeyValuePair(encodedKey)
-    If Not IsEmpty(KeyValuePair) Then
-        If IsObject(KeyValuePair(KEYVALUEPAIR_VALUE)) Then
-            Set Item = KeyValuePair(KEYVALUEPAIR_VALUE)
+    Dim itemKeyValuePair As Variant
+    itemKeyValuePair = GetKeyValuePair(encodedKey)
+    If Not IsEmpty(itemKeyValuePair) Then
+        If IsObject(itemKeyValuePair(KEYVALUEPAIR_VALUE)) Then
+            Set Item = itemKeyValuePair(KEYVALUEPAIR_VALUE)
         Else
-            Item = KeyValuePair(KEYVALUEPAIR_VALUE)
+            Item = itemKeyValuePair(KEYVALUEPAIR_VALUE)
         End If
     Else
         'If key is not found when attempting to return an existing item,
@@ -237,7 +229,7 @@ Attribute Item.VB_UserMemId = 0
         this.keyItemPairs.Add Item:=Array(Key, Empty), Key:=encodedKey
         this.updateItems = True
         this.updateKeys = True
-        Item = Empty ' Not found -> Returns Empty
+        Item = Empty                             ' Not found -> Returns Empty
     End If
 End Property
 
@@ -256,7 +248,6 @@ End Property
 ' The key can be scalar or an object, the item must be a scalar value.
 ' ------------------------------------------------------------'
 Public Property Let Item(ByRef Key As Variant, ByRef Item As Variant)
-Attribute Item.VB_Description = "Set or returns the item for a specified key."
     'Item must be a scalar value only
     If Not IsObject(Item) Then
         Dim encodedKey As String
@@ -271,7 +262,7 @@ Attribute Item.VB_Description = "Set or returns the item for a specified key."
         End If
     Else
         'Raised when creating a key,item pair where a item is an object when expecting a scalar value.
-        VBA.Err.Raise 450 ' Wrong number of arguments of invalid property assignment.
+        VBA.Err.Raise 450                        ' Wrong number of arguments of invalid property assignment.
     End If
     this.updateItems = True
     this.updateKeys = True
@@ -292,7 +283,6 @@ End Property
 ' and the item is linked to it, a sort of an "implicit add".
 ' ------------------------------------------------------------'
 Public Property Set Item(ByRef Key As Variant, ByRef Item As Object)
-Attribute Item.VB_Description = "Set or returns the item for a specified key."
     Dim encodedKey As String
     encodedKey = EncodeKey(Key)
     If EncodedKeyExists(encodedKey) Then
@@ -319,19 +309,18 @@ End Property
 '             Raised when the key specifed to be changed doesn't exist in the dictionary.
 ' ------------------------------------------------------------'
 Public Property Let Key(ByRef Key As Variant, ByRef newKey As Variant)
-Attribute Key.VB_Description = "Changes the key of an existing key, value pair to a new key value."
     Dim encodedKey As String
     encodedKey = EncodeKey(Key)
     'retrieving an array with a key, item pair when the first item is the key and second is the value
-    Dim KeyValuePair As Variant
-    KeyValuePair = GetKeyValuePair(encodedKey)
-    If Not IsEmpty(KeyValuePair) Then
+    Dim itemKeyValuePair As Variant
+    itemKeyValuePair = GetKeyValuePair(encodedKey)
+    If Not IsEmpty(itemKeyValuePair) Then
         Dim newEncodedKey As String
         newEncodedKey = EncodeKey(newKey)
         If Not EncodedKeyExists(newEncodedKey) Then
             'Cannont update collection keys must remove and add back the key,item pair
             this.keyItemPairs.Remove encodedKey
-            this.keyItemPairs.Add Item:=Array(newKey, KeyValuePair(KEYVALUEPAIR_VALUE)), Key:=newEncodedKey
+            this.keyItemPairs.Add Item:=Array(newKey, itemKeyValuePair(KEYVALUEPAIR_VALUE)), Key:=newEncodedKey
             this.updateItems = True
             this.updateKeys = True
         Else
@@ -341,7 +330,7 @@ Attribute Key.VB_Description = "Changes the key of an existing key, value pair t
         End If
     Else
         'Error raised when the key specified to be changed doesn't exist in the dictionary.
-        VBA.Err.Raise 32811     'Application-defined or object-defined error
+        VBA.Err.Raise 32811                      'Application-defined or object-defined error
     End If
 End Property
 
@@ -349,9 +338,9 @@ End Property
 '@Description("Sets or returns the text encoding mode for encoding case senstive string keys.")
 ' ------------------------------------------------------------'
 Public Property Get TextEncodingMode() As TextEncodingMethod
-Attribute TextEncodingMode.VB_Description = "Sets or returns the text encoding mode for encoding case senstive string keys."
     TextEncodingMode = this.textKeyEncodingMethod
 End Property
+
 ''
 '@Description("Sets or returns the text encoding mode for encoding case senstive string keys.")
 '@param textEncodingMethod Value representing the text encoding method used i.e. Unicode or Ascii.
@@ -364,18 +353,17 @@ End Property
 '@Remarks The text encoding mode cannot be changed once the dictionary contains items.
 ' ------------------------------------------------------------'
 Public Property Let TextEncodingMode(ByVal encodingMethod As TextEncodingMethod)
-Attribute TextEncodingMode.VB_Description = "Sets or returns the text encoding mode for encoding case senstive string keys."
     If Me.Count > 0 Then
         ' Can't change the TextEncodingMode for a dictionary that contains data
-        VBA.Err.Raise 5 ' Invalid procedure call or argument
+        VBA.Err.Raise 5                          ' Invalid procedure call or argument
     Else
         If (encodingMethod = TextEncodingMethod.temUnicode) Or _
-           (encodingMethod = TextEncodingMethod.temAscii) _
-        Then
+                                                            (encodingMethod = TextEncodingMethod.temAscii) _
+                                                            Then
             this.textKeyEncodingMethod = encodingMethod
         Else
             ' illeagal value
-            VBA.Err.Raise 9 '<- Subscript out of range
+            VBA.Err.Raise 9                      '<- Subscript out of range
         End If
     End If
 End Property
@@ -391,7 +379,7 @@ End Property
 '@return (DictionaryKeyValuePair)
 Public Function Create(Optional ByVal compareMethod As VBA.VbCompareMethod = VBA.vbBinaryCompare, _
                        Optional ByVal encodingMethod As TextEncodingMethod = TextEncodingMethod.temUnicode) _
-                       As DictionaryKeyValuePair
+        As DictionaryKeyValuePair
     Dim newDictionary As DictionaryKeyValuePair
     Set newDictionary = New DictionaryKeyValuePair
     newDictionary.CompareMode = compareMethod
@@ -410,7 +398,6 @@ End Function
 '@Remarks The key and item can be a scalar value or an object.
 ' ------------------------------------------------------------'
 Public Sub Add(ByRef Key As Variant, ByRef Item As Variant)
-Attribute Add.VB_Description = "Adds a new key, item pair to the dictionary."
     'If IsDefaultInstance Then
     '    VBA.Err.Raise 429, , "Error default instance"
     'End If
@@ -430,7 +417,6 @@ End Sub
 '          Raised for invalid/unsupported key data type from encoding the collection key.
 ' ------------------------------------------------------------'
 Public Function Exists(ByRef Key As Variant) As Boolean
-Attribute Exists.VB_Description = "Returns True if a specified key exists in the dictionary; False if it does not."
     Dim keyExists As Boolean
     keyExists = False
     Dim encodedKey As String
@@ -447,22 +433,21 @@ End Function
 '@Remarks Repopulates items array only if changes to items are made.
 ' ------------------------------------------------------------'
 Public Function Items() As Variant
-Attribute Items.VB_Description = "Returns an array of all items in the dictionary."
     If Me.Count > 0 Then
         If this.updateItems Then
             Erase this.itemList
             ReDim this.itemList(0 To this.keyItemPairs.Count - 1)
-            Dim KeyValuePair As Variant
+            Dim itemKeyValuePair As Variant
             Dim itemsIndex As Long
             itemsIndex = 0
-            For Each KeyValuePair In this.keyItemPairs
-                If IsObject(KeyValuePair(KEYVALUEPAIR_VALUE)) Then
-                    Set this.itemList(itemsIndex) = KeyValuePair(KEYVALUEPAIR_VALUE)
+            For Each itemKeyValuePair In this.keyItemPairs
+                If IsObject(itemKeyValuePair(KEYVALUEPAIR_VALUE)) Then
+                    Set this.itemList(itemsIndex) = itemKeyValuePair(KEYVALUEPAIR_VALUE)
                 Else
-                    this.itemList(itemsIndex) = KeyValuePair(KEYVALUEPAIR_VALUE)
+                    this.itemList(itemsIndex) = itemKeyValuePair(KEYVALUEPAIR_VALUE)
                 End If
                 itemsIndex = itemsIndex + 1
-            Next KeyValuePair
+            Next itemKeyValuePair
         End If
         Items = this.itemList
     Else
@@ -477,22 +462,21 @@ End Function
 '@Remarks Repopulates the keys array only if changes to keys are made.
 ' ------------------------------------------------------------'
 Public Function Keys() As Variant
-Attribute Keys.VB_Description = "Returns an array of all keys in the dictionary."
     If Me.Count > 0 Then
         If this.updateKeys Then
             Erase this.keyList
             ReDim this.keyList(0 To this.keyItemPairs.Count - 1)
-            Dim KeyValuePair As Variant
+            Dim itemKeyValuePair As Variant
             Dim keysIndex As Long
             keysIndex = 0
-            For Each KeyValuePair In this.keyItemPairs
-                If IsObject(KeyValuePair(KEYVALUEPAIR_KEY)) Then
-                    Set this.keyList(keysIndex) = KeyValuePair(KEYVALUEPAIR_KEY)
+            For Each itemKeyValuePair In this.keyItemPairs
+                If IsObject(itemKeyValuePair(KEYVALUEPAIR_KEY)) Then
+                    Set this.keyList(keysIndex) = itemKeyValuePair(KEYVALUEPAIR_KEY)
                 Else
-                    this.keyList(keysIndex) = KeyValuePair(KEYVALUEPAIR_KEY)
+                    this.keyList(keysIndex) = itemKeyValuePair(KEYVALUEPAIR_KEY)
                 End If
                 keysIndex = keysIndex + 1
-            Next KeyValuePair
+            Next itemKeyValuePair
         End If
         Keys = this.keyList
     Else
@@ -510,7 +494,6 @@ End Function
 '             Raised when key doesn't exist to be removed
 ' ------------------------------------------------------------'
 Public Sub Remove(ByRef Key As Variant)
-Attribute Remove.VB_Description = "Removes a key,item pair from the dictionary for the key specified."
     Dim encodedKey As String
     encodedKey = EncodeKey(Key)
     RemoveKeyValuePair encodedKey
@@ -522,7 +505,6 @@ End Sub
 '@Description("Removes all key, item pairs from the dictionary.")
 ' ------------------------------------------------------------'
 Public Sub RemoveAll()
-Attribute RemoveAll.VB_Description = "Removes all key, item pairs from the dictionary."
     Set this.keyItemPairs = New VBA.Collection
     Erase this.keyList
     Erase this.itemList
@@ -565,29 +547,29 @@ Private Function EncodeKey(ByRef Key As Variant) As String
     keyVarType = VarType(Key)
     Select Case keyVarType
         'The Scripting.Dictionary groups all numeric format data types together
-        Case VBA.vbInteger, VBA.vbLong, VBA.vbSingle, VBA.vbDouble, VBA.vbCurrency, VBA.vbByte, VBA.vbDate
-            EncodeKey = NUMBER_KEY & VBA.Hex(Key)
+    Case VBA.vbInteger, VBA.vbLong, VBA.vbSingle, VBA.vbDouble, VBA.vbCurrency, VBA.vbByte, VBA.vbDate
+        EncodeKey = NUMBER_KEY & Key
         'Added support for LongLong Scripting.Dictionary doesn't allow 64-Bit data types for keys
         #If VBA7 Then
         Case VBA.vbLongLong
-            EncodeKey = NUMBER_KEY & VBA.Hex(Key)
+            EncodeKey = NUMBER_KEY & Key
         #End If
-        Case VBA.vbString
-            EncodeKey = EncodeStringKey(Key)
-        Case VBA.vbObject
-            If Key Is Nothing Then
-                EncodeKey = OBJECT_NOTHING_KEY
-             Else
-                EncodeKey = OBJECT_KEY & ObjPtr(Key)
-            End If
-        Case VBA.vbBoolean
-            EncodeKey = BOOLEAN_KEY & IIf(Key, "-1", "0")
-        Case VBA.vbNull
-            EncodeKey = NULL_KEY
-        Case VBA.vbEmpty
-            EncodeKey = EMPTY_KEY
-        Case Else
-            VBA.Err.Raise 5
+    Case VBA.vbString
+        EncodeKey = EncodeStringKey(Key)
+    Case VBA.vbObject
+        If Key Is Nothing Then
+            EncodeKey = OBJECT_NOTHING_KEY
+        Else
+            EncodeKey = OBJECT_KEY & ObjPtr(Key)
+        End If
+    Case VBA.vbBoolean
+        EncodeKey = BOOLEAN_KEY & IIf(Key, "-1", "0")
+    Case VBA.vbNull
+        EncodeKey = NULL_KEY
+    Case VBA.vbEmpty
+        EncodeKey = EMPTY_KEY
+    Case Else
+        VBA.Err.Raise 5
     End Select
 End Function
 
@@ -604,11 +586,11 @@ Private Function EncodeStringKey(ByRef Key As Variant) As String
     If this.compareMethod = vbBinaryCompare Then
         'Allow for upper and lower case string keys by encoding to a Unicode hex string
         Dim bytes() As Byte
-        bytes = Key  'Assign Unicode string to unicode byte array.
+        bytes = Key                              'Assign Unicode string to unicode byte array.
         If this.textKeyEncodingMethod = TextEncodingMethod.temUnicode Then
             EncodeStringKey = STRING_KEY & BytesToUnicodeHexString(bytes) 'Each character is converted into four hex characters.
         Else
-            EncodeStringKey = STRING_KEY & BytesToAsciiHexString(bytes)   'Each character is converted into two hex characters.
+            EncodeStringKey = STRING_KEY & BytesToAsciiHexString(bytes) 'Each character is converted into two hex characters.
         End If
     Else
         EncodeStringKey = STRING_KEY & CStr(Key)
@@ -658,7 +640,7 @@ CleanExit:
     Exit Function
 ErrorHandler:
     EncodedKeyExists = False
-    Err.Clear 'reset error trapping.
+    Err.Clear                                    'reset error trapping.
     Resume CleanExit
 End Function
 
@@ -672,7 +654,7 @@ Private Function GetKeyValuePair(ByRef encodedKey As String) As Variant
 CleanExit:
     Exit Function
 ErrorHandler:
-    Err.Clear 'reset error trapping.
+    Err.Clear                                    'reset error trapping.
     Resume CleanExit
 End Function
 
@@ -689,8 +671,8 @@ CleanExit:
     Exit Sub
 ErrorHandler:
     'Match Scripting.Dictionary error for when key doesn't exist when being removed
-     VBA.Err.Raise 32811, "Method 'Remove' of object IDictionary failed"
-     Resume CleanExit
+    VBA.Err.Raise 32811, "Method 'Remove' of object IDictionary failed"
+    Resume CleanExit
 End Sub
 
 '============================================='
@@ -703,6 +685,7 @@ End Sub
 Private Property Get IDictionary_CompareMode() As VBA.VbCompareMethod
     IDictionary_CompareMode = this.compareMethod
 End Property
+
 Private Property Let IDictionary_CompareMode(ByVal compareMethod As VBA.VbCompareMethod)
     Me.CompareMode = compareMethod
 End Property
@@ -717,16 +700,18 @@ End Property
 
 Private Property Get IDictionary_Item(ByRef Key As Variant) As Variant
     Dim result As Variant
-    result = Array(Me.Item(Key)) 'The get Item property result is wrapped in the Array to avoid running twice
+    result = Array(Me.Item(Key))                 'The get Item property result is wrapped in the Array to avoid running twice
     If IsObject(result(0)) Then
         Set IDictionary_Item = result(0)
     Else
         IDictionary_Item = result(0)
     End If
 End Property
+
 Private Property Let IDictionary_Item(ByRef Key As Variant, ByRef Item As Variant)
     Me.Item(Key) = Item
 End Property
+
 Private Property Set IDictionary_Item(ByRef Key As Variant, ByRef Item As Object)
     Set Me.Item(Key) = Item
 End Property
@@ -761,3 +746,5 @@ End Sub
 Private Sub IDictionary_RemoveAll()
     Me.RemoveAll
 End Sub
+
+
