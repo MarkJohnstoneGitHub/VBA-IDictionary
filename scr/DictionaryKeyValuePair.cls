@@ -71,7 +71,6 @@ Attribute VB_Description = "A VBA alternative for the Scripting.Dictionary which
 '@VersionNotes VBA-IDictionary v1.2 (July 14, 2019)
 ' Modified to Predeclared added a Create method.
 ' Modified naming of enums in TextEncodingMethod.
-' Changed encoding of numeric keys to use Hex for improved performance, in method EncodeKey.
 '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 
 Option Explicit
