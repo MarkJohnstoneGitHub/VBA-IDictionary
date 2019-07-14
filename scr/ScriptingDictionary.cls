@@ -5,14 +5,15 @@ END
 Attribute VB_Name = "ScriptingDictionary"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
+Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Attribute VB_Description = "A VBA wrapper for the Microsoft Scripting.Dictionary, scrrun.dll library, implementing an IDictionary interface.\r\n\r\nIDictionary v1.1 (July 12, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
-'@ModuleDescription "A VBA wrapper for the Microsoft Scripting.Dictionary, scrrun.dll library, implementing an IDictionary interface.\r\n\r\nIDictionary v1.1 (July 12, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+Attribute VB_Description = "A VBA wrapper for the Microsoft Scripting.Dictionary, scrrun.dll library, implementing an IDictionary interface.\r\n\r\nVBA-IDictionary v1.2 (July 14, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+'@PredeclaredId
+'@ModuleDescription "A VBA wrapper for the Microsoft Scripting.Dictionary, scrrun.dll library, implementing an IDictionary interface.\r\n\r\nVBA-IDictionary v1.2 (July 14, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
 '@Folder("VBA-IDictionary")
 '@REFERENCEADDIN Microsoft Scripting Runtime Scripting scrrun.dll
 
-'@Version IDictionary v1.1 (July 12, 2019)
+'@Version VBA-IDictionary v1.2 (July 14, 2019)
 '(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary
 '@Description A VBA wrapper for the Microsoft Scripting.Dictionary, scrrun.dll library
 '@Dependencies IDictionary.cls, ScriptingDictionary.cls
@@ -27,20 +28,23 @@ Attribute VB_Description = "A VBA wrapper for the Microsoft Scripting.Dictionary
 '            Raised for Mac or Scripting.Dictionary isn't available from compiler arguments.
 '            It can also be raised for late binding where the call to CreateObject fails.
 '@Remarks
-'  The compiler constants SCRIPTING_REFERENCE and SCRIPTING_LATEBINDING are
-'  used to determine whether the library is referenced or if not. If not available
-'  to created using late binding.
-'  These compiler constants are required to be appropriately set in the
-'  ScriptingDictionary.cls and the Dictionary.cls
-'  If not set appropriately they may cause compile errors.
+' The compiler constants SCRIPTING_REFERENCE and SCRIPTING_LATEBINDING are
+' used to determine whether the library is referenced or if not. If not available
+' to created using late binding.
+' These compiler constants are required to be appropriately set in the
+' ScriptingDictionary.cls and the Dictionary.cls
+' If not set appropriately they may cause compile errors.
 '
-'  Updating the compiler constants
-'  If the Microsoft Scripting Runtime is referenced set:
-'     SCRIPTING_REFERENCE = True
-'  If the Microsoft Scripting Runtime is not referenced and is available for late binding set
-'     SCRIPTING_REFERENCE = False, SCRIPTING_LATEBINDING = True
-'  For Mac, set to:
-'     SCRIPTING_REFERENCE = False, SCRIPTING_LATEBINDING = Frue
+' Updating the compiler constants
+' If the Microsoft Scripting Runtime is referenced set:
+'    SCRIPTING_REFERENCE = True
+' If the Microsoft Scripting Runtime is not referenced and is available for late binding set
+'    SCRIPTING_REFERENCE = False, SCRIPTING_LATEBINDING = True
+' For Mac, set to:
+'    SCRIPTING_REFERENCE = False, SCRIPTING_LATEBINDING = Frue
+'
+'@VersionNotes VBA-IDictionary v1.2 (July 14, 2019)
+' Modified to Predeclared added a Create method.
 '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 Option Explicit
 
@@ -89,13 +93,13 @@ Const SCRIPTING_DICTIONARY As String = "Scripting.Dictionary"
 '            Raised for Mac or Scripting.Dictionary isn't available from compiler arguments.
 '            It can also be raised for late binding where the call to CreateObject fails.
 Private Sub Class_Initialize()
-#If Not Mac And SCRIPTING_REFERENCE Then
-    Set this.scriptDictionary = New Scripting.Dictionary
-#ElseIf Not Mac And SCRIPTING_LATEBINDING Then
-    Set this.scriptDictionary = CreateObject(SCRIPTING_DICTIONARY)
-#Else
-    VBA.Err.Raise 429 'Cannot create object as Scripting.Dictionary is not available."
-#End If
+    #If Not Mac And SCRIPTING_REFERENCE Then
+        Set this.scriptDictionary = New Scripting.Dictionary
+    #ElseIf Not Mac And SCRIPTING_LATEBINDING Then
+        Set this.scriptDictionary = CreateObject(SCRIPTING_DICTIONARY)
+    #Else
+        VBA.Err.Raise 429 'Cannot create object as Scripting.Dictionary is not available."
+    #End If
 End Sub
 
 Private Sub Class_Terminate()
@@ -249,6 +253,18 @@ End Property
 '============================================='
 
 ''
+'@Description("Creates a new instance of a ScriptingDictionary.")
+'@param compareMethod (Optional) The comparison mode for comparing string keys in a Dictionary object, default is vbBinaryCompare.
+'@return (ScriptingDictionary)
+Public Function Create(Optional ByVal compareMethod As VBA.VbCompareMethod = VBA.vbBinaryCompare) As ScriptingDictionary
+Attribute Create.VB_Description = "Creates a new instance of a ScriptingDictionary."
+    Dim newDictionary As ScriptingDictionary
+    Set newDictionary = New ScriptingDictionary
+    newDictionary.CompareMode = compareMethod
+    Set Create = newDictionary
+End Function
+
+''
 '@Description("Adds a key and item pair to a Dictionary object.")
 '@param key  The key associated with the item being added.
 '@param item The new item associated with the key being added.
@@ -321,6 +337,7 @@ Attribute RemoveAll.VB_Description = "Removes all key, item pairs from a Diction
     this.scriptDictionary.RemoveAll
 #End If
 End Sub
+
 
 '============================================='
 'Interfaces
