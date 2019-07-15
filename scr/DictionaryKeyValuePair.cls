@@ -12,13 +12,6 @@ Attribute VB_Description = "A VBA alternative for the Scripting.Dictionary which
 '@ModuleDescription "A VBA alternative for the Scripting.Dictionary which is Mac compatible using the IDictionary interface.\r\n\r\nVBA-IDictionary v1.21 (July 15, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
 '@Folder("VBA-IDictionary")
 
-'@TODO For Version 2.0 Rename IDictionary.cls to IScriptingDictionary.cls
-'@TODO Possible provide a property to choose what to enumerate on. i.e. Keys, Items or key,value pair
-'@TODO And or provide a Method to return an array of Key, Item pairs of type TKeyValuePairs.
-'@TODO Adding a method to return an array of TKeyValuePairs will extend upon the an IDictionary and
-'      method will only be available through casting to DictionaryKeyValue pair or possible use an
-'      enumerate on property?
-
 ''
 '@Version VBA-IDictionary v1.21 (July 15, 2019)
 '(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary
