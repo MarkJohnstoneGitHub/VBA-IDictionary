@@ -56,6 +56,6 @@ Great consideration has been given to provide as good as possible performance wh
 Notes: 
 For Version 2.0 Aiming to rename the IDictionary.cls to IScriptingDictionary.cls and updating all classes implementing the IDictionary interface according.  This is to better reflect that the interface conforms to the public interface of the MS Scripting Runtime Dictionary. 
 
-Also as planning to use the IDictionary interface for extended features returning key, value pairs. 
+
 
 
