@@ -7,17 +7,20 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Attribute VB_Description = "A VBA alternative for the Scripting.Dictionary which is Mac compatible using the IDictionary interface.\r\n\r\nVBA-IDictionary v1.2 (July 14, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+Attribute VB_Description = "A VBA alternative for the Scripting.Dictionary which is Mac compatible using the IDictionary interface.\r\n\r\nVBA-IDictionary v1.21 (July 15, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
 '@PredeclaredId
-'@ModuleDescription "A VBA alternative for the Scripting.Dictionary which is Mac compatible using the IDictionary interface.\r\n\r\nVBA-IDictionary v1.2 (July 14, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+'@ModuleDescription "A VBA alternative for the Scripting.Dictionary which is Mac compatible using the IDictionary interface.\r\n\r\nVBA-IDictionary v1.21 (July 15, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
 '@Folder("VBA-IDictionary")
 
-'@TODO For enumeration of the DictionaryKeyItemPair consider changing to on Keys for consistency.
-'@TODO Or provide a property to choose what to enumerate on. i.e. Keys, Items or key,value pair
-'@TODO And or provide a Method to return an array of Key, Item pairs.
+'@TODO For Version 2.0 Rename IDictionary.cls to IScriptingDictionary.cls
+'@TODO Possible provide a property to choose what to enumerate on. i.e. Keys, Items or key,value pair
+'@TODO And or provide a Method to return an array of Key, Item pairs of type TKeyValuePairs.
+'@TODO Adding a method to return an array of TKeyValuePairs will extend upon the an IDictionary and
+'      method will only be available through casting to DictionaryKeyValue pair or possible use an
+'      enumerate on property?
 
 ''
-'@Version VBA-IDictionary v1.2 (July 14, 2019)
+'@Version VBA-IDictionary v1.21 (July 15, 2019)
 '(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary
 '@Description A VBA alternative for the Scripting.Dictionary which is Mac compatible using the IDictionary interface.
 '@Required IDictionary.cls, DictionaryKeyValuePair.cls
@@ -27,7 +30,7 @@ Attribute VB_Description = "A VBA alternative for the Scripting.Dictionary which
 '         the Dictionary.Create function which returns a IDictionary type.
 '
 '@Author Mark Johnstone markjohnstone@hotmail.com
-'@LastModified July 14, 2019
+'@LastModified July 15, 2019
 '@Package IDictionary.cls
 '         Dictionary.cls
 '         ScriptingDictionary.cls
@@ -68,7 +71,7 @@ Attribute VB_Description = "A VBA alternative for the Scripting.Dictionary which
 ' The default is unicode encoding. (Slower performance however should cater for most languages.)
 ' The calling code is responsibile for ensuring ASCII compatible string keys are provided or
 ' indeterminate results may occur.
-'@VersionNotes VBA-IDictionary v1.2 (July 14, 2019)
+'@VersionNotes VBA-IDictionary v1.21 (July 15, 2019)
 ' Modified to Predeclared added a Create method.
 ' Modified naming of enums in TextEncodingMethod.
 '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
@@ -143,6 +146,7 @@ End Sub
 '@Description("Sets or returns the comparison mode for comparing string keys.")
 ' ------------------------------------------------------------'
 Public Property Get CompareMode() As VBA.VbCompareMethod
+Attribute CompareMode.VB_Description = "Sets or returns the comparison mode for comparing string keys."
     CompareMode = this.compareMethod
 End Property
 
@@ -158,6 +162,7 @@ End Property
 '@Remarks The comparison mode cannot be changed once the dictionary contains items.
 ' ------------------------------------------------------------'
 Public Property Let CompareMode(ByVal compareMethod As VBA.VbCompareMethod)
+Attribute CompareMode.VB_Description = "Sets or returns the comparison mode for comparing string keys."
     If Me.Count > 0 Then
         ' Can't change the CompareMode for a dictionary that contains data
         ' http://msdn.microsoft.com/en-us/library/office/gg278481(v=office.15).aspx
@@ -179,17 +184,20 @@ End Property
 '@Description("Returns the number of key, item pairs in a Dictionary object.")
 ' ------------------------------------------------------------'
 Public Property Get Count() As Long
+Attribute Count.VB_Description = "Returns the number of key, item pairs in a Dictionary object."
     Count = this.keyItemPairs.Count
 End Property
 
 ''
 '@Enumerator
-'@Description("Enumerator for dictionary which returns a one dimensional variant array of a key,item pair.")
+'@Description("Enumerator for dictionary which returns variant keys.")
 '@Remarks Attribute NewEnum.VB_UserMemId = -4 declares NewEnum as the enumerator
 '         Attribute NewEnum.VB_MemberFlags = "40" declares NewEnum as a hidden property.
 ' ------------------------------------------------------------'
 Public Property Get NewEnum() As IUnknown
-    Set NewEnum = this.keyItemPairs.[_NewEnum]
+Attribute NewEnum.VB_Description = "Enumerator for dictionary which returns variant keys."
+Attribute NewEnum.VB_UserMemId = -4
+    Set NewEnum = Me.Keys.[_NewEnum]
 End Property
 
 ''
@@ -211,6 +219,8 @@ End Property
 '  Attribute Item.VB_UserMemId = 0 Declares property Item as the default property.
 ' ------------------------------------------------------------'
 Public Property Get Item(ByRef Key As Variant) As Variant
+Attribute Item.VB_Description = "Set or returns the item for a specified key."
+Attribute Item.VB_UserMemId = 0
     Dim encodedKey As String
     encodedKey = EncodeKey(Key)
     'retrieving an array with key, item
@@ -247,6 +257,7 @@ End Property
 ' The key can be scalar or an object, the item must be a scalar value.
 ' ------------------------------------------------------------'
 Public Property Let Item(ByRef Key As Variant, ByRef Item As Variant)
+Attribute Item.VB_Description = "Set or returns the item for a specified key."
     'Item must be a scalar value only
     If Not IsObject(Item) Then
         Dim encodedKey As String
@@ -282,6 +293,7 @@ End Property
 ' and the item is linked to it, a sort of an "implicit add".
 ' ------------------------------------------------------------'
 Public Property Set Item(ByRef Key As Variant, ByRef Item As Object)
+Attribute Item.VB_Description = "Set or returns the item for a specified key."
     Dim encodedKey As String
     encodedKey = EncodeKey(Key)
     If EncodedKeyExists(encodedKey) Then
@@ -308,6 +320,7 @@ End Property
 '             Raised when the key specifed to be changed doesn't exist in the dictionary.
 ' ------------------------------------------------------------'
 Public Property Let Key(ByRef Key As Variant, ByRef newKey As Variant)
+Attribute Key.VB_Description = "Changes the key of an existing key, value pair to a new key value."
     Dim encodedKey As String
     encodedKey = EncodeKey(Key)
     'retrieving an array with a key, item pair when the first item is the key and second is the value
@@ -337,6 +350,7 @@ End Property
 '@Description("Sets or returns the text encoding mode for encoding case senstive string keys.")
 ' ------------------------------------------------------------'
 Public Property Get TextEncodingMode() As TextEncodingMethod
+Attribute TextEncodingMode.VB_Description = "Sets or returns the text encoding mode for encoding case senstive string keys."
     TextEncodingMode = this.textKeyEncodingMethod
 End Property
 
@@ -352,6 +366,7 @@ End Property
 '@Remarks The text encoding mode cannot be changed once the dictionary contains items.
 ' ------------------------------------------------------------'
 Public Property Let TextEncodingMode(ByVal encodingMethod As TextEncodingMethod)
+Attribute TextEncodingMode.VB_Description = "Sets or returns the text encoding mode for encoding case senstive string keys."
     If Me.Count > 0 Then
         ' Can't change the TextEncodingMode for a dictionary that contains data
         VBA.Err.Raise 5                          ' Invalid procedure call or argument
@@ -379,6 +394,7 @@ End Property
 Public Function Create(Optional ByVal compareMethod As VBA.VbCompareMethod = VBA.vbBinaryCompare, _
                        Optional ByVal encodingMethod As TextEncodingMethod = TextEncodingMethod.temUnicode) _
         As DictionaryKeyValuePair
+Attribute Create.VB_Description = "Creates a new instance of a DictionaryKeyValuePair."
     Dim newDictionary As DictionaryKeyValuePair
     Set newDictionary = New DictionaryKeyValuePair
     newDictionary.CompareMode = compareMethod
@@ -397,6 +413,7 @@ End Function
 '@Remarks The key and item can be a scalar value or an object.
 ' ------------------------------------------------------------'
 Public Sub Add(ByRef Key As Variant, ByRef Item As Variant)
+Attribute Add.VB_Description = "Adds a new key, item pair to the dictionary."
     'If IsDefaultInstance Then
     '    VBA.Err.Raise 429, , "Error default instance"
     'End If
@@ -416,6 +433,7 @@ End Sub
 '          Raised for invalid/unsupported key data type from encoding the collection key.
 ' ------------------------------------------------------------'
 Public Function Exists(ByRef Key As Variant) As Boolean
+Attribute Exists.VB_Description = "Returns True if a specified key exists in the dictionary; False if it does not."
     Dim keyExists As Boolean
     keyExists = False
     Dim encodedKey As String
@@ -432,6 +450,7 @@ End Function
 '@Remarks Repopulates items array only if changes to items are made.
 ' ------------------------------------------------------------'
 Public Function Items() As Variant
+Attribute Items.VB_Description = "Returns an array of all items in the dictionary."
     If Me.Count > 0 Then
         If this.updateItems Then
             Erase this.itemList
@@ -461,6 +480,7 @@ End Function
 '@Remarks Repopulates the keys array only if changes to keys are made.
 ' ------------------------------------------------------------'
 Public Function Keys() As Variant
+Attribute Keys.VB_Description = "Returns an array of all keys in the dictionary."
     If Me.Count > 0 Then
         If this.updateKeys Then
             Erase this.keyList
@@ -493,6 +513,7 @@ End Function
 '             Raised when key doesn't exist to be removed
 ' ------------------------------------------------------------'
 Public Sub Remove(ByRef Key As Variant)
+Attribute Remove.VB_Description = "Removes a key,item pair from the dictionary for the key specified."
     Dim encodedKey As String
     encodedKey = EncodeKey(Key)
     RemoveKeyValuePair encodedKey
@@ -504,6 +525,7 @@ End Sub
 '@Description("Removes all key, item pairs from the dictionary.")
 ' ------------------------------------------------------------'
 Public Sub RemoveAll()
+Attribute RemoveAll.VB_Description = "Removes all key, item pairs from the dictionary."
     Set this.keyItemPairs = New VBA.Collection
     Erase this.keyList
     Erase this.itemList
@@ -551,7 +573,7 @@ Private Function EncodeKey(ByRef Key As Variant) As String
         'Added support for LongLong Scripting.Dictionary doesn't allow 64-Bit data types for keys
         #If VBA7 Then
         Case VBA.vbLongLong
-            EncodeKey = NUMBER_KEY & Key
+            EncodeKey = NUMBER_KEY & Str(Key)
         #End If
     Case VBA.vbString
         EncodeKey = EncodeStringKey(Key)
@@ -559,7 +581,7 @@ Private Function EncodeKey(ByRef Key As Variant) As String
         If Key Is Nothing Then
             EncodeKey = OBJECT_NOTHING_KEY
         Else
-            EncodeKey = OBJECT_KEY & ObjPtr(Key)
+            EncodeKey = OBJECT_KEY & Str(ObjPtr(Key))
         End If
     Case VBA.vbBoolean
         EncodeKey = BOOLEAN_KEY & IIf(Key, "-1", "0")

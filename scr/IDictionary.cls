@@ -7,23 +7,26 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-Attribute VB_Description = "The IDictionary interface used for dictionary implementations.\r\n\r\nIDictionary v1.2 (July 14, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
-'@ModuleDescription "The IDictionary interface used for dictionary implementations.\r\n\r\nIDictionary v1.2 (July 14, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+Attribute VB_Description = "The IDictionary interface used for dictionary implementations.\r\n\r\nVBA-IDictionary v1.21 (July 15, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+'@Interface
+'@ModuleDescription "The IDictionary interface used for dictionary implementations.\r\n\r\nVBA-IDictionary v1.21 (July 15, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
 '@Folder("VBA-IDictionary")
-
 ''
-'@Version VBA-IDictionary v1.2 (July 14, 2019)
+'@Version VBA-IDictionary v1.21 (July 15, 2019)
 '(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary
 '@Description The IDictionary interface used for dictionary implementations.
 '@Author Mark Johnstone markjohnstone@hotmail.com
-'@LastModified July 14, 2019
+'@LastModified July 15, 2019
 '@Package IDictionary.cls
 '         Dictionary.cls
 '         ScriptingDictionary.cls
 '         DictionaryKeyValuePair.cls
 '------------------------------------------------------------'
 
+'@TODO For Version 2.0 Rename IDictionary.cls to IScriptingDictionary.cls
+
 Option Explicit
+
 
 '============================================='
 'Properties

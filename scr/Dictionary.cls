@@ -7,18 +7,18 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Attribute VB_Description = "IDictionary factory which is a VBA dictionary alternative for the Microsoft Scripting.Dictionary which is Mac compatible.\r\n\r\nVBA-IDictionary v1.2 (July 14, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
-'@ModuleDescription "IDictionary factory which is a VBA dictionary alternative for the Microsoft Scripting.Dictionary which is Mac compatible.\r\n\r\nVBA-IDictionary v1.2 (July 14, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+Attribute VB_Description = "IDictionary factory which is a VBA dictionary alternative for the Microsoft Scripting.Dictionary which is Mac compatible.\r\n\r\nVBA-IDictionary v1.21 (July 15, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+'@ModuleDescription "IDictionary factory which is a VBA dictionary alternative for the Microsoft Scripting.Dictionary which is Mac compatible.\r\n\r\nVBA-IDictionary v1.21 (July 15, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
 '@PredeclaredId
 '@Folder("VBA-IDictionary")
 '@REFERENCEADDIN Microsoft Scripting Runtime Scripting scrrun.dll
 
 ''
-'@Version VBA-IDictionary v1.2 (July 14, 2019)
+'@Version VBA-IDictionary v1.21 (July 15, 2019)
 '(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary
 '@Description IDictionary factory which is a VBA dictionary alternative for the Microsoft Scripting.Dictionary which is Mac compatible.
 '@Author markjohnstone@hotmail.com
-'@LastModified July 14, 2019
+'@LastModified July 15, 2019
 '@Dependencies ("IDictionary.cls, Dictionary.cls, DictionaryKeyValuePair.cls, ScriptingDictionary.cls")
 '              Optional: Reference addin Microsoft Scripting Runtime Scripting, scrrun.dll dependant on compiler constant settings.
 '@Package IDictionary.cls
@@ -61,7 +61,7 @@ Attribute VB_Description = "IDictionary factory which is a VBA dictionary altern
 ' It can only be changed if there are no items in the dictionary object.
 ' When using ASCII encoding the calling code is responsible for ensuring ASCII compatible
 ' string keys are provided or indetermined results may occur.
-'@VersionNotes VBA-IDictionary v1.2 (July 14, 2019)
+'@VersionNotes VBA-IDictionary v1.21 (July 15, 2019)
 ' Modified ScriptingDictionary.cls and DictionaryKeyValuePair.cls to Predeclared added a Create method.
 ' Removed private function for CreateDictionaryKeyValue pair and moved to the create method of DictionaryKeyValuePair.
 ' Modified naming of enums in IDictionaryType to avoid any conflicts with class names.

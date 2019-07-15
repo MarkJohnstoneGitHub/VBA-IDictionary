@@ -7,13 +7,13 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Attribute VB_Description = "A VBA wrapper for the Microsoft Scripting.Dictionary, scrrun.dll library, implementing an IDictionary interface.\r\n\r\nVBA-IDictionary v1.2 (July 14, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+Attribute VB_Description = "A VBA wrapper for the Microsoft Scripting.Dictionary, scrrun.dll library, implementing an IDictionary interface.\r\n\r\nVBA-IDictionary v1.21 (July 15, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
 '@PredeclaredId
-'@ModuleDescription "A VBA wrapper for the Microsoft Scripting.Dictionary, scrrun.dll library, implementing an IDictionary interface.\r\n\r\nVBA-IDictionary v1.2 (July 14, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+'@ModuleDescription "A VBA wrapper for the Microsoft Scripting.Dictionary, scrrun.dll library, implementing an IDictionary interface.\r\n\r\nVBA-IDictionary v1.21 (July 15, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
 '@Folder("VBA-IDictionary")
 '@REFERENCEADDIN Microsoft Scripting Runtime Scripting scrrun.dll
 
-'@Version VBA-IDictionary v1.2 (July 14, 2019)
+'@Version VBA-IDictionary v1.21 (July 15, 2019)
 '(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary
 '@Description A VBA wrapper for the Microsoft Scripting.Dictionary, scrrun.dll library
 '@Dependencies IDictionary.cls, ScriptingDictionary.cls
@@ -43,7 +43,7 @@ Attribute VB_Description = "A VBA wrapper for the Microsoft Scripting.Dictionary
 ' For Mac, set to:
 '    SCRIPTING_REFERENCE = False, SCRIPTING_LATEBINDING = Frue
 '
-'@VersionNotes VBA-IDictionary v1.2 (July 14, 2019)
+'@VersionNotes VBA-IDictionary v1.21 (July 15, 2019)
 ' Modified to Predeclared added a Create method.
 '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 Option Explicit
