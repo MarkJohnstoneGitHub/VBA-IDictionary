@@ -48,9 +48,14 @@ On Windows if both compiler constants are set to False the Dictionary.Create use
 
 Note: Only tested on Windows and would be appreciated if anyone can test it on the Mac platform. I don't anticipate any compatiblity issues if the compiler constants are appropriately set.
 
-
 Performance.
 
 Great consideration has been given to provide as good as possible performance while using the underlying VBA.Collection.  See the Excel VBA-IDictionaryPerformance spreadhsheet for a performance comparisions of the ScriptingDictionary, DictionaryKeyValuePair and other VBA dictionary implementations.
+
+
+Notes: 
+For Version 2.0 Aiming to rename the IDictionary.cls to IScriptingDictionary.cls and updating all classes implementing the IDictionary interface according.  This is to better reflect that the interface conforms to the public interface of the MS Scripting Runtime Dictionary. 
+
+Also as planning to use the IDictionary interface for extended features returning key, value pairs. 
 
 
