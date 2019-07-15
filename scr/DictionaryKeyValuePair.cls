@@ -414,10 +414,6 @@ End Function
 ' ------------------------------------------------------------'
 Public Sub Add(ByRef Key As Variant, ByRef Item As Variant)
 Attribute Add.VB_Description = "Adds a new key, item pair to the dictionary."
-    'If IsDefaultInstance Then
-    '    VBA.Err.Raise 429, , "Error default instance"
-    'End If
-
     Dim encodedKey As String
     encodedKey = EncodeKey(Key)
     this.keyItemPairs.Add Item:=Array(Key, Item), Key:=encodedKey
