@@ -71,7 +71,8 @@ As always it's a matter of selecting the appropriate datastruce for your require
 
 ## Testing
 Unit testing can be found in TestModuleDictionaryKeyValuePair.bas within the Ms Access database provided.
-Only tested on Windows and would be appreciated if anyone can test it on the Mac platform. I don't anticipate any compatiblity issues if the compiler constants are appropriately set.
+
+Only tested on the Windows platform and would be appreciated if anyone can test it on the Mac platform. I don't anticipate any compatiblity issues if the compiler constants are appropriately set.
 
 
 ## Notes
@@ -101,7 +102,7 @@ Next
 
 ## Future Extensions
 
-For Version 2.0 Possibly rename the IDictionary.cls to IScriptingDictionary.cls and updating all classes implementing the IDictionary interface according.  This is to better reflect that the interface conforms to the public interface of the MS Scripting Runtime Dictionary and avoid confusion with other IDictionary implementations published. 
+For Version 2.0 possibly rename the IDictionary.cls to IScriptingDictionary.cls and updating all classes implementing the IDictionary interface according.  This is to better reflect that the interface conforms to the public interface of the MS Scripting Runtime Dictionary and avoid confusion with other IDictionary implementations published.
 
 Will be examining adding an IList interface to integrate the behaviour of various datastructures.
 
