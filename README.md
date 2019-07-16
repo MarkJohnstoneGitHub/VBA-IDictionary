@@ -54,9 +54,9 @@ The VBA-IDictionary provides interfaces for the dictionary implementations provi
 
 Great consideration has been given to provide as good as possible performance while using the underlying VBA.Collection.
 
-See the Excel VBA-IDictionaryPerformance spreadhsheet for a performance comparisions of the ScriptingDictionary, DictionaryKeyValuePair and other VBA dictionary implementations.
+See the Excel VBA-IDictionaryPerformance spreadhsheet for a performance comparisions of the ScriptingDictionary, DictionaryKeyValuePair and other VBA dictionary implementations.  Performance results displayed in the graphs can be filtered to compare various IDictionary implements for the various key and item data types and string key processing options provided.
 
-Performance testing can be performed using methods in the TestPerformanceKeyValuePairAdd.bas and TestPeformanceKeyValuePairItem.bas files and results are displayed in the immediate window, which currently are manually copied into the peformance Excel spreadsheet using the Text Import Wizard. Those modules are still under development.
+Performance testing can be performed using modules in the MS Access database provided, TestPerformanceKeyValuePairAdd.bas and TestPeformanceKeyValuePairItem.bas and results are displayed in the immediate window.  The results are currently manually copied into the peformance Excel spreadsheet using the Text Import Wizard. Those modules are still under development.
 
 The DictionaryKeyValuePairs compared to other VBA dictionary implementations its significant performance improvement, especially when adding items, is likely due to not constantly maintaining an array of Items and Keys, and only populating them when requested. On future requests for Items and Keys they are only repopulated if changes have been made to the dictionary keys, and/or items.  This tradeoff results in the first iteration of Items and Keys to be fractionally slower and any subsequent requests without changes are at similar performance as not repopulated.
 
