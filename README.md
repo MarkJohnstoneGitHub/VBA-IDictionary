@@ -18,18 +18,18 @@ Optional Reference Addin:  Microsoft Scripting Runtime Scripting scrrun.dll
   
   Set myDictionary = Dictionary.Create(IDictionaryType.ScriptingDictionary)
 
-Compiler Constants:
+## Compiler Constants:
 
 Note the compiler constants in the Dictionary.cls and ScriptingDictionary.cls 
 These compiler constants may require updating to True or False for user requirements and platform.
 
-For Mac:
+**For Mac:**
 
 #Const SCRIPTING_REFERENCE = False
 
 #Const SCRIPTING_LATEBINDING = False
 
-For Windows:
+**For Windows:**
 
 If the Microsoft Scripting Runtime Scripting is referenced:
 
