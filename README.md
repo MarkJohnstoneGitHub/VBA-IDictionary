@@ -71,7 +71,7 @@ For datasets continaing key and/or items that are objects whatever the datastruc
 As always it's a matter of selecting the appropriate datastruce for your requirements and not one suits all purposes. 
 
 ## Testing
-Unit testing can be found in TestModuleDictionaryKeyValuePair.bas within the Ms Access database provided.
+Unit testing can be found in TestModuleDictionaryKeyValuePair.bas within the Ms Access database provided.  The VBA Addin Rubberduck is required to run the unit testing. [Link](http://rubberduckvba.com/)
 
 Only tested on the Windows platform and would be appreciated if anyone can test it on the Mac platform. I don't anticipate any compatiblity issues if the compiler constants are appropriately set.
 
