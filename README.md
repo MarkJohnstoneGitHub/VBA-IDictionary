@@ -48,12 +48,12 @@ On Windows if both compiler constants are set to False the Dictionary.Create use
 Note: Only tested on Windows and would be appreciated if anyone can test it on the Mac platform. I don't anticipate any compatiblity issues if the compiler constants are appropriately set.
 
 
-Advantages
+Advantages:
 
 The VBA-IDictionary provides interfaces on all dictionary implementations provided, allowing for easy transition switching between the required dictionary implementation.  i.e. It allows for programming to an interface instead to a particular implementation. This can be advantageous for things such as unit testing etc.
 
 
-Performance.
+Performance:
 
 Great consideration has been given to provide as good as possible performance while using the underlying VBA.Collection.  See the Excel VBA-IDictionaryPerformance spreadhsheet for a performance comparisions of the ScriptingDictionary, DictionaryKeyValuePair and other VBA dictionary implementations.
 
@@ -72,6 +72,7 @@ As always it's a matter of selecting the appropriate datastruce for your require
 
 
 Notes:
+
 For VBA-IDictionary v2.1 the enumeration of DictionaryKeyValuePairs is on Keys, previously it had been on a key,value pair in a one dimensional array where the first element i.e. dictEntry(0) was the key and the second i.e. dictEntry(1) was the dictionary item.  This was changed for consistence with the Scripting.Dictionary behaviour.  Possibly in future will add a option to decided to enumerate on keys or key, value pairs.  General best practice is to specify to enumerate on Keys instead of enumerating on the dictionary object.
 
 The performance of enumerating on the tuple of key,value pairs verses enumerating on Keys to obtain its associated item would expect to be quicker, as not requesting an item via the dictionary. 
@@ -89,7 +90,7 @@ For each dictEntry in myDictionary
 Next
 
 
-Future Extensions
+Future Extensions:
 
 For Version 2.0 Possibly rename the IDictionary.cls to IScriptingDictionary.cls and updating all classes implementing the IDictionary interface according.  This is to better reflect that the interface conforms to the public interface of the MS Scripting Runtime Dictionary and avoid confusion with other IDictionary implementations published. 
 
