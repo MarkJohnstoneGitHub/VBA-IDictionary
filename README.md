@@ -86,7 +86,7 @@ Eg. *assuming only scalar values for dictionary keys and items
 
 For Each dictkey in myDictionary.Keys
 
-  dictItem = Item(dictkey)
+   dictItem = Item(dictkey)
   
 Next
 
@@ -94,9 +94,9 @@ Verses the enumeration of key,value pairs
 
 For Each dictEntry in myDictionary
 
-  dictKey = dictEntry(0)
+   dictKey = dictEntry(0)
   
-  dictItem = dictEntry(1)
+   dictItem = dictEntry(1)
   
 Next
 
