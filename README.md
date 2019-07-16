@@ -80,13 +80,18 @@ The performance of enumerating on the tuple of key,value pairs verses enumeratin
 Eg. *assuming only scalar values for dictionary keys and items
 
 For each dictkey in myDictionary.Keys
+
   dictItem = Item(dictkey)
+  
 Next
 
 Verses the enumeration of key,value pairs
 For each dictEntry in myDictionary
+
   dictKey = dictEntry(0)
+  
   dictItem = dictEntry(1)
+  
 Next
 
 
