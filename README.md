@@ -66,14 +66,16 @@ For the scenerio for string keys and the compare mode is vbTextCompare at approx
 
 Overall the performance of the DictionaryKeyValuePair has significant improvements over other VBA dictionary implementations at approximately twice the performance for small datasets, and numerous times for large ones. It appears to have a gradual linear degraduation in performance in comparision to expotientially degrading. 
 
-I haven't recently got around to pushing it limitations thou should be reasonable capable of handling datasets of two million items in a reasonable timeframe.  The Scripting.Dictionary noticeable degrades in performance for datasets over 500,000+ items.
+I haven't recently got around to pushing it limitations thou should be reasonably capable of handling datasets of two million items in a reasonable timeframe.  The Scripting.Dictionary noticeable degrades in performance for datasets over 500,000+ items.
+
+For datasets continaing key and/or items that are objects note whatever the datastructure VBA's garbage collection is slow for cleaning up objects.
 
 As always it's a matter of selecting the appropriate datastruce for your requirements and not one suits all purposes. 
 
 
 Notes:
 
-For VBA-IDictionary v2.1 the enumeration of DictionaryKeyValuePairs is on Keys, previously it had been on a key,value pair in a one dimensional array where the first element i.e. dictEntry(0) was the key and the second i.e. dictEntry(1) was the dictionary item.  This was changed for consistence with the Scripting.Dictionary behaviour.  Possibly in future will add a option to decided to enumerate on keys or key, value pairs.  General best practice is to specify to enumerate on Keys instead of enumerating on the dictionary object.
+For VBA-IDictionary v2.1 the enumeration of DictionaryKeyValuePairs is on Keys, previously it had been on a key, value pair in a one dimensional array where the first element i.e. dictEntry(0) was the key and the second i.e. dictEntry(1) was the dictionary item.  This was changed for consistency with the Scripting.Dictionary behaviour.  Possibly in future will add an option to decided to enumerate on keys or key, value pairs.  General best practice is to specify to enumerate on Keys instead of enumerating on the dictionary object.
 
 The performance of enumerating on the tuple of key,value pairs verses enumerating on Keys to obtain its associated item would expect to be quicker, as not requesting an item via the dictionary. 
 
@@ -101,6 +103,7 @@ Future Extensions:
 For Version 2.0 Possibly rename the IDictionary.cls to IScriptingDictionary.cls and updating all classes implementing the IDictionary interface according.  This is to better reflect that the interface conforms to the public interface of the MS Scripting Runtime Dictionary and avoid confusion with other IDictionary implementations published. 
 
 Will be examining adding an IList interface to integrate the behaviour of various datastructures.
+
 Possible explore typed a <TKey,TValue> Dictionary.  
 
 
