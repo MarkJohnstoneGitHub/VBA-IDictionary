@@ -70,7 +70,7 @@ I haven't recently got around to pushing it limitations, thou should be reasonab
 
 For datasets continaing key and/or items that are objects whatever the data structure used, VBA's garbage collection is slow for cleaning up objects.  For this requirement it's best to keep datasets under 300,000 items as it takes considerable time to clean up.  It appears to follow an expontial time taken, the larger the dataset that contains objects.
 
-As always it's a matter of selecting the appropriate datas tructure for your requirements and not one suits all purposes. 
+As always it's a matter of selecting the appropriate data structure for your requirements and not one suits all purposes. 
 
 ## Testing
 Unit testing can be found in TestModuleDictionaryKeyValuePair.bas within the Ms Access database provided.  The VBA Addin [Rubberduck](http://rubberduckvba.com/) is required to run the unit testing. 
