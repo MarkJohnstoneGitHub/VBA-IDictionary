@@ -47,7 +47,7 @@ On Windows if both compiler constants are set to False the Dictionary.Create use
 
 ## Advantages
 
-The VBA-IDictionary provides interfaces for the dictionary implementations provided, allowing for the easy transition when switching between tdictionary implementations.  i.e. It allows for programming to an interface instead to a particular implementation. This can be advantageous for things such as unit testing.
+The VBA-IDictionary provides interfaces for the dictionary implementations provided, allowing for the easy transition when switching between dictionary implementations.  i.e. It allows for programming to an interface instead to a particular implementation which can be advantageous for unit testing.
 
 
 ## Performance
