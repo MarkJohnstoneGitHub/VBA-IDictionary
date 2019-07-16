@@ -68,9 +68,9 @@ Overall the performance of the DictionaryKeyValuePair has significant improvemen
 
 I haven't recently got around to pushing it limitations, thou should be reasonably capable of handling datasets of two million items within a reasonable timeframe.  The Scripting.Dictionary noticeable degrades in performance for datasets over 500,000+ items.
 
-For datasets continaing key and/or items that are objects whatever the datastructure used, VBA's garbage collection is slow for cleaning up objects.  For this requirement it's best to keep datasets under 300,000 items as it takes considerable time to clean up.  It appears to follow an expontial time taken, the larger the dataset that contains objects.
+For datasets continaing key and/or items that are objects whatever the data structure used, VBA's garbage collection is slow for cleaning up objects.  For this requirement it's best to keep datasets under 300,000 items as it takes considerable time to clean up.  It appears to follow an expontial time taken, the larger the dataset that contains objects.
 
-As always it's a matter of selecting the appropriate datastruce for your requirements and not one suits all purposes. 
+As always it's a matter of selecting the appropriate datas tructure for your requirements and not one suits all purposes. 
 
 ## Testing
 Unit testing can be found in TestModuleDictionaryKeyValuePair.bas within the Ms Access database provided.  The VBA Addin [Rubberduck](http://rubberduckvba.com/) is required to run the unit testing. 
