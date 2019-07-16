@@ -21,7 +21,7 @@ Optional Reference Addin:  Microsoft Scripting Runtime Scripting scrrun.dll
 ## Compiler Constants
 
 Note the compiler constants in the Dictionary.cls and ScriptingDictionary.cls 
-These compiler constants may require updating to True or False for user requirements and platform.
+These compiler constants may require updating to True or False according to requirements and platform.
 
 **For Mac:**
 
@@ -31,11 +31,11 @@ These compiler constants may require updating to True or False for user requirem
 
 **For Windows:**
 
-If the Microsoft Scripting Runtime Scripting is referenced:
+**If the Microsoft Scripting Runtime Scripting is referenced:**
 
 #Const SCRIPTING_REFERENCE = True
 
-If the Microsoft Scripting Runtime Scripting not referenced but wish to use it late bound:
+**If the Microsoft Scripting Runtime Scripting not referenced but wish to use it late bound:**
 
 #Const SCRIPTING_REFERENCE = False
 
@@ -45,19 +45,16 @@ For Mac as the Scripting.Dictionary isn't available the Dictionary.Create uses t
 
 On Windows if both compiler constants are set to False the Dictionary.Create uses the DictionaryKeyValuePair as an alternative. 
 
-Note: Only tested on Windows and would be appreciated if anyone can test it on the Mac platform. I don't anticipate any compatiblity issues if the compiler constants are appropriately set.
-
-
 ## Advantages
 
-The VBA-IDictionary provides interfaces on all dictionary implementations provided, allowing for easy transition switching between the required dictionary implementation.  i.e. It allows for programming to an interface instead to a particular implementation. This can be advantageous for things such as unit testing etc.
+The VBA-IDictionary provides interfaces for the dictionary implementations provided, allowing for the easy transition when switching between tdictionary implementations.  i.e. It allows for programming to an interface instead to a particular implementation. This can be advantageous for things such as unit testing.
 
 
 ## Performance
 
 Great consideration has been given to provide as good as possible performance while using the underlying VBA.Collection.  See the Excel VBA-IDictionaryPerformance spreadhsheet for a performance comparisions of the ScriptingDictionary, DictionaryKeyValuePair and other VBA dictionary implementations.
 
-The DictionaryKeyValuePairs compared to other VBA dictionary implementations its significant performance improvement, especially when adding items, is likely due to not constantly maintaining an array of Items and Keys and only populating them when requested. On future requests for Items and Keys they are only repopulated if changes have been made to the dictionary keys, and/or items.  This tradeoff results in the first iteration of Items and Keys to be fractionally slower and any subsequent requests without changes are at similar performance as not repopulated.
+The DictionaryKeyValuePairs compared to other VBA dictionary implementations its significant performance improvement, especially when adding items, is likely due to not constantly maintaining an array of Items and Keys, and only populating them when requested. On future requests for Items and Keys they are only repopulated if changes have been made to the dictionary keys, and/or items.  This tradeoff results in the first iteration of Items and Keys to be fractionally slower and any subsequent requests without changes are at similar performance as not repopulated.
 
 For Adding items:
 
@@ -71,6 +68,10 @@ I haven't recently got around to pushing it limitations thou should be reasonabl
 For datasets continaing key and/or items that are objects note whatever the datastructure VBA's garbage collection is slow for cleaning up objects.
 
 As always it's a matter of selecting the appropriate datastruce for your requirements and not one suits all purposes. 
+
+## Testing
+Unit testing can be found in TestModuleDictionaryKeyValuePair.bas within the Ms Access database provided.
+Only tested on Windows and would be appreciated if anyone can test it on the Mac platform. I don't anticipate any compatiblity issues if the compiler constants are appropriately set.
 
 
 ## Notes
