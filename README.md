@@ -56,17 +56,19 @@ Great consideration has been given to provide as good as possible performance wh
 
 See the Excel VBA-IDictionaryPerformance spreadhsheet for a performance comparisions of the ScriptingDictionary, DictionaryKeyValuePair and other VBA dictionary implementations.
 
+Performance testing can be performed using methods in the TestPerformanceKeyValuePairAdd.bas and TestPeformanceKeyValuePairItem.bas files and results are displayed in the immediate window, which currently are manually copied into the peformance Excel spreadsheet using the Text Import Wizard. Those modules are still under development.
+
 The DictionaryKeyValuePairs compared to other VBA dictionary implementations its significant performance improvement, especially when adding items, is likely due to not constantly maintaining an array of Items and Keys, and only populating them when requested. On future requests for Items and Keys they are only repopulated if changes have been made to the dictionary keys, and/or items.  This tradeoff results in the first iteration of Items and Keys to be fractionally slower and any subsequent requests without changes are at similar performance as not repopulated.
 
 For Adding items, compared to the MS Scripting.Dictionary for datasets at approximately 350,000 items it starts to outperform.
 
-For the scenerio for string keys and the compare mode is vbTextCompare at approximatel 100,000 items it starts to outperform.
+For the scenerio for string keys and the compare mode is vbTextCompare at approximately 100,000 items it starts to outperform.
 
-Overall the performance of the DictionaryKeyValuePair has significant improvements over other VBA dictionary implementations at approximately twice the performance for small datasets, and numerous times for large ones. It appears to have a gradual linear degraduation in performance in comparision to expotientially degrading. 
+Overall the performance of the DictionaryKeyValuePair has significant improvements over other VBA dictionary implementations at approximately twice the performance for small datasets, and numerous times for large ones. It appears to have a gradual linear degraduation in performance in comparision to others that appear to expotientially degrade in performance. 
 
 I haven't recently got around to pushing it limitations, thou should be reasonably capable of handling datasets of two million items within a reasonable timeframe.  The Scripting.Dictionary noticeable degrades in performance for datasets over 500,000+ items.
 
-For datasets continaing key and/or items that are objects whatever the datastructure VBA's garbage collection is slow for cleaning up objects.  For this scenerio it's best to keep datasets under 300,000 items as it takes considerable time to clean up.  It appears to follow an expontial time taken, the larger the dataset that contains objects.
+For datasets continaing key and/or items that are objects whatever the datastructure used, VBA's garbage collection is slow for cleaning up objects.  For this requirement it's best to keep datasets under 300,000 items as it takes considerable time to clean up.  It appears to follow an expontial time taken, the larger the dataset that contains objects.
 
 As always it's a matter of selecting the appropriate datastruce for your requirements and not one suits all purposes. 
 
