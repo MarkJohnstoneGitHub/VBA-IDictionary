@@ -86,7 +86,7 @@ Eg. *assuming only scalar values for dictionary keys and items
 
 For Each dictkey in myDictionary.Keys
 
-   dictItem = Item(dictkey)
+   dictItem = myDictionary.Item(dictkey)
   
 Next
 
