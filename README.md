@@ -92,7 +92,9 @@ For Each dictkey in myDictionary.Keys
   
 Next
 
-Verses the enumeration of key,value pairs
+Verses the enumeration of key,value pairs 
+
+Note only for DictionaryKeyValuePairs where if for the Property Get NewEnum() As IUnknown , Set NewEnum = this.keyItemPairs etc
 
 For Each dictEntry in myDictionary
 
