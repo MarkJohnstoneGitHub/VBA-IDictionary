@@ -54,7 +54,7 @@ The DictionaryKeyValuePair.Create has two optional parameters
  
  -The encodingMethod for improved performance for case sensitive string keys, the option TextEncodingMethod.temAscii should only be used where string keys are ASCII compatible.
  
-**Add, CompareMode, Count, Exists, Item, Items, Keys, Remove, RemoveAll**
+**Add, CompareMode, Count, Exists, Item, Key, Items, Keys, Remove, RemoveAll**
 
 The same as the Scripting.Dictionary [Scripting.Dictionary object](https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/dictionary-object)
   
