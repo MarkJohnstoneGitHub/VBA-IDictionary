@@ -67,7 +67,6 @@ End Property
 ''
 '@DefaultMember
 '@Description("Set or returns the item for a specified key.")
-'         Attribute Item.VB_UserMemId = 0 Declares property Item as the default property.
 '@Remarks The syntax for setting an item is: dictionaryobject.Item(key) = newItem
 '         If you try to set item to a nonexistent key, a new key, item pair is added
 '         to the dictionary, and the item is linked to it, a sort of "implicit add".
