@@ -16,6 +16,8 @@ Optional Reference Addin:  Microsoft Scripting Runtime Scripting scrrun.dll
 
 **Creating using Dictionary.cls an IDictionary factory class:**
 
+According to the compiler constants and/or the IDictionary implemententation requested an available implementation is returned.  I.e. If the Scripting.Dictionary is requested and not available a DictionaryKeyValuePair will be returned.
+
 The Dictionary.Create has three optional parameters, dictionaryType, compareMethod, encodingMethod.
 
 -The dictionaryType specifies which IDictionary implementation to create. i.e. Scripting.Dictionary or DictionaryKeyValuePairs.
@@ -23,8 +25,6 @@ The Dictionary.Create has three optional parameters, dictionaryType, compareMeth
 -The compareMethod specifies how string keys are handled either case sensitive or ignore case.  
 
 -The encodingMethod is only applicable to the DictionaryKeyValuePairs for improved performance for case sensitive string keys, and  the option TextEncodingMethod.temAscii should only be used where string keys are ASCII compatible. 
-
-According to the compiler constants and/or the IDictionary implemententation requested an available implementation is returned.  I.e. If the Scripting.Dictionary is requested and not available a DictionaryKeyValuePair will be returned.
 
 Examples:
 
