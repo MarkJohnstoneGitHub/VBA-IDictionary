@@ -13,10 +13,10 @@ VBA dictionary which is Mac compatible which implements an IDictionary interface
 
    
 Optional Reference Addin:  Microsoft Scripting Runtime Scripting scrrun.dll
-
+ 
 ## Usage
 
-**Creating an IDictionary**
+### Creating an IDictionary
 
 **Creating a IDictionary with Dictionary.Create()**
 
