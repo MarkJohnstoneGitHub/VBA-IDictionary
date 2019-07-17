@@ -18,9 +18,9 @@ Optional Reference Addin:  Microsoft Scripting Runtime Scripting scrrun.dll
 
 **Creating an IDictionary**
 
-**Creating using Dictionary.cls an IDictionary factory class:**
+**Creating a IDictionary with Dictionary.Create()**
 
-According to the compiler constants and/or the IDictionary implemententation specified an available implementation is returned.  I.e. If the Scripting.Dictionary is requested and not available a DictionaryKeyValuePair will be returned.
+The Dictionary.cls is an IDictionary factory class.  It returns an available IDictionary implementation, according to the compiler constants and/or the IDictionary implemententation specified.  I.e. If the Scripting.Dictionary is specified and not available a DictionaryKeyValuePair will be returned.
 
 The Dictionary.Create has three optional parameters:
 
