@@ -58,9 +58,9 @@ The DictionaryKeyValuePair.Create() has the two optional parameters:
 
  - compareMethod : Specifies how string keys are handled either case sensitive or ignore case.  Default value is vbBinaryCompare.
  
- - encodingMethod : Secifies which encoding method to use on case sensitive string keys i.e. Unicode or ASCII. Default value is TextEncodingMethod.temUnicode
+ - encodingMethod : Specifies which encoding text method to use on case sensitive string keys i.e. Unicode or ASCII. Default value is TextEncodingMethod.temUnicode
  
-   Dim myDictionary As IDictionary 'or could use As DictionaryKeyValuePairDictionaryKeyValuePair
+   Dim myDictionary As IDictionary 'or could use As DictionaryKeyValuePair
   
   Set myDictionary = DictionaryKeyValuePair.Create(VBA.vbTextCompare, TextEncodingMethod.temAscii)
  
