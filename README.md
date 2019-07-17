@@ -95,6 +95,8 @@ On Windows if both compiler constants are set to False the Dictionary.Create use
 
 The VBA-IDictionary provides interfaces for the dictionary implementations provided, allowing for the easy transition when switching between dictionary implementations.  i.e. It allows for programming to an interface instead to a particular implementation which can be advantageous for unit testing.
 
+Added support for keys of LongLong data type which is only availablue using the DictionaryKeyVluePair.cls IDictionary implementation and compatibile with VBA 7.  This also allows using LongPtr as keys as they are converted to LongLong or Long data types for earlier versions.
+
 
 ## Performance
 
@@ -125,6 +127,8 @@ Only tested on the Windows platform and would be appreciated if anyone can test 
 
 
 ## Notes
+
+Support for keys of LongLong data type which is only availablue using the DictionaryKeyVluePair.cls IDictionary implementation and compatibile with VBA 7.
 
 For VBA-IDictionary v2.1 the enumeration of DictionaryKeyValuePairs is on Keys, previously it had been on a key, value pair in a one dimensional array where the first element i.e. dictEntry(0) was the key and the second i.e. dictEntry(1) was the dictionary item.  This was changed for consistency with the Scripting.Dictionary behaviour.  Possibly in future will add an option to decided to enumerate on keys or key, value pairs.  General best practice is to specify to enumerate on Keys instead of enumerating on the dictionary object.
 
