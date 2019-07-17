@@ -19,7 +19,9 @@ Optional Reference Addin:  Microsoft Scripting Runtime Scripting scrrun.dll
 The Dictionary.Create has three optional parameters, dictionaryType, compareMethod, encodingMethod.
 
 -The dictionaryType specifies which IDictionary implementation to create. i.e. Scripting.Dictionary or DictionaryKeyValuePairs.
+
 -The compareMethod specifies how string keys are handled either case sensitive or ignore case.  
+
 -The encodingMethod is only applicable to the DictionaryKeyValuePairs for improved performance for case sensitive string keys, and  the option TextEncodingMethod.temAscii should only be used where string keys are ASCII compatible. 
 
 According to the compiler constants and/or the IDictionary implemententation requested an available implementation is returned.  I.e. If the Scripting.Dictionary is requested and not available a DictionaryKeyValuePair will be returned.
@@ -39,6 +41,7 @@ Examples:
 Two IDictionary implementations have been provided, DictionaryKeyValuePair.cls and ScriptingDictionary.cls
  
 The ScriptingDictionary.Create has one optional parameter, compareMethod.
+
  -The compareMethod specifies how string keys are handled either case sensitive or ignore case. 
  
   Dim myDictionary As IDictionary 'or could use As ScriptingDictionary
@@ -46,7 +49,9 @@ The ScriptingDictionary.Create has one optional parameter, compareMethod.
   Set myDictionary = ScriptingDictionary.Create(VBA.vbTextCompare)
   
 The DictionaryKeyValuePair.Create has two optional parameters
- -The compareMethod specifies how string keys are handled either case sensitive or ignore case.  
+
+ -The compareMethod specifies how string keys are handled either case sensitive or ignore case. 
+ 
  -The encodingMethod for improved performance for case sensitive string keys, the option TextEncodingMethod.temAscii should only be used where string keys are ASCII compatible.
  
 **Add, CompareMode, Count, Exists, Item, Items, Keys, Remove, RemoveAll**
