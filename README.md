@@ -155,7 +155,7 @@ Next
 
 For Version 2.0 possibly rename the IDictionary.cls to IScriptingDictionary.cls and updating all classes implementing the IDictionary interface according.  This is to better reflect that the interface conforms to the public interface of the MS Scripting Runtime Dictionary and avoid confusion with other IDictionary implementations published.
 
-Will be examining adding an IList interface to integrate the behaviour of various datastructures.
+Will be examining adding an IList interface to integrate the behaviour of various data structures.
 
 Possible explore typed a <TKey,TValue> Dictionary.  
 
