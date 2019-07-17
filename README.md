@@ -68,7 +68,7 @@ Overall the performance of the DictionaryKeyValuePair has significant improvemen
 
 I haven't recently got around to pushing it limitations, thou should be reasonably capable of handling datasets of two million items within a reasonable timeframe.  The Scripting.Dictionary noticeable degrades in performance for datasets over 500,000+ items.
 
-For datasets continaing key and/or items that are objects whatever the data structure used, VBA's garbage collection is slow for cleaning up objects.  For this requirement it's best to keep datasets under 300,000 items as it takes considerable time to clean up.  It appears to follow an expontial time taken, the larger the dataset that contains objects.
+For datasets continaing key and/or items that are objects whatever the data structure used, VBA's appears slow at dereferening of objects and destroying them as it is single threaded.  For this requirement it's best to keep datasets under 300,000 items as it takes considerable time to clean up.  The only other work around is have large datasets containing objects to have global references and push the cleaning up process to when the application closes. 
 
 As always it's a matter of selecting the appropriate data structure for your requirements and not one suits all purposes. 
 
