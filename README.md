@@ -22,13 +22,13 @@ Optional Reference Addin:  Microsoft Scripting Runtime Scripting scrrun.dll
 
 According to the compiler constants and/or the IDictionary implemententation specified an available implementation is returned.  I.e. If the Scripting.Dictionary is requested and not available a DictionaryKeyValuePair will be returned.
 
-The Dictionary.Create has three optional parameters, dictionaryType, compareMethod, encodingMethod.
+The Dictionary.Create has three optional parameters:
 
- - The dictionaryType specifies which IDictionary implementation to create. i.e. Scripting.Dictionary or DictionaryKeyValuePairs.
+ - dictionaryType : Specifies which IDictionary implementation to create. i.e. ScriptingDictionary or DictionaryKeyValuePairs. Default is IDictionaryType.idtScriptingDictionary
 
- - The compareMethod specifies how string keys are handled either case sensitive or ignore case.  
+ - compareMethod  : Specifies how string keys are handled either case sensitive or ignore case. Default value is vbBinaryCompare.
 
- - The encodingMethod is only applicable to the DictionaryKeyValuePairs for improved performance for case sensitive string keys, and  the option TextEncodingMethod.temAscii should only be used where string keys are ASCII compatible. 
+ - encodingMethod : Secified which encoding method to use on case sensitive string keys i.e. Unicode or ASCII.  It is only applicable to the DictionaryKeyValuePairs class for improved performance, and  the option TextEncodingMethod.temAscii should only be used where string keys are ASCII compatible.  Default value is TextEncodingMethod.temUnicode.
 
 Examples:
 
@@ -44,19 +44,26 @@ Examples:
 
 Two IDictionary implementations have been provided, DictionaryKeyValuePair.cls and ScriptingDictionary.cls
  
-The ScriptingDictionary.Create has one optional parameter, compareMethod.
+The ScriptingDictionary.Create() has one optional parameter:
 
- -The compareMethod specifies how string keys are handled either case sensitive or ignore case. 
+ - compareMethod : Specifies how string keys are handled either case sensitive or ignore case. Default value is vbBinaryCompare.
+ 
+ Example
  
   Dim myDictionary As IDictionary 'or could use As ScriptingDictionary
   
   Set myDictionary = ScriptingDictionary.Create(VBA.vbTextCompare)
   
-The DictionaryKeyValuePair.Create has two optional parameters
+The DictionaryKeyValuePair.Create() has the two optional parameters:
 
- -The compareMethod specifies how string keys are handled either case sensitive or ignore case. 
+ - compareMethod : Specifies how string keys are handled either case sensitive or ignore case.  Default value is vbBinaryCompare.
  
- -The encodingMethod for improved performance for case sensitive string keys, the option TextEncodingMethod.temAscii should only be used where string keys are ASCII compatible.
+ - encodingMethod : Secifies which encoding method to use on case sensitive string keys i.e. Unicode or ASCII. Default value is TextEncodingMethod.temUnicode
+ 
+   Dim myDictionary As IDictionary 'or could use As DictionaryKeyValuePairDictionaryKeyValuePair
+  
+  Set myDictionary = DictionaryKeyValuePair.Create(VBA.vbTextCompare, TextEncodingMethod.temAscii)
+ 
  
 **Add, CompareMode, Count, Exists, Item, Key, Items, Keys, Remove, RemoveAll**
 
