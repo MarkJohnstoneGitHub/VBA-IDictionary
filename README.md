@@ -65,7 +65,7 @@ The same as the [Scripting.Dictionary object](https://docs.microsoft.com/en-us/o
 
 ## Compiler Constants
 
-Note the compiler constants in the [DictionaryKeyValuePair.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/DictionaryKeyValuePair.cls) and [ScriptingDictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/ScriptingDictionary.cls)
+Note the compiler constants in the [Dictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/Dictionary.cls) and [ScriptingDictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/ScriptingDictionary.cls)
 
 These compiler constants may require updating to True or False according to the availablity of the Scripting.Dictionary reference and platform.
 
