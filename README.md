@@ -56,7 +56,7 @@ The DictionaryKeyValuePair.Create has two optional parameters
  
 **Add, CompareMode, Count, Exists, Item, Key, Items, Keys, Remove, RemoveAll**
 
-The same as the Scripting.Dictionary [Scripting.Dictionary object](https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/dictionary-object)
+The same as the [Scripting.Dictionary object](https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/dictionary-object)
   
 
 ## Compiler Constants
