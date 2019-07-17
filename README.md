@@ -2,11 +2,15 @@
 
 VBA dictionary which is Mac compatible which implements an IDictionary interface. 
 
-Classes Required:
-  IDictionary.cls
-  Dictionary.cls
-  ScriptingDictionary.cls
-  DictionaryKeyValuePair.cls
+**Classes Required:**
+ - [IDictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/IDictionary.cls)
+ 
+ - [Dictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/Dictionary.cls)
+ 
+ - [DictionaryKeyValuePair.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/DictionaryKeyValuePair.cls)
+ 
+ - [ScriptingDictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/ScriptingDictionary.cls)
+
    
 Optional Reference Addin:  Microsoft Scripting Runtime Scripting scrrun.dll
 
