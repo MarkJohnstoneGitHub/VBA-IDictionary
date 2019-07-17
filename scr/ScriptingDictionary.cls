@@ -41,7 +41,7 @@ Attribute VB_Description = "A VBA wrapper for the Microsoft Scripting.Dictionary
 ' If the Microsoft Scripting Runtime is not referenced and is available for late binding set
 '    SCRIPTING_REFERENCE = False, SCRIPTING_LATEBINDING = True
 ' For Mac, set to:
-'    SCRIPTING_REFERENCE = False, SCRIPTING_LATEBINDING = True
+'    SCRIPTING_REFERENCE = False, SCRIPTING_LATEBINDING = False
 '
 '@VersionNotes VBA-IDictionary v1.21 (July 15, 2019)
 ' Modified to Predeclared added a Create method.
