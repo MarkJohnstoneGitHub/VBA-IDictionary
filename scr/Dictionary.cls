@@ -18,7 +18,7 @@ Attribute VB_Description = "IDictionary factory which is a VBA dictionary altern
 '(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary
 '@Description IDictionary factory which is a VBA dictionary alternative for the Microsoft Scripting.Dictionary which is Mac compatible.
 '@Author markjohnstone@hotmail.com
-'@LastModified July 15, 2019
+'@LastModified July 20, 2019
 '@Dependencies ("IDictionary.cls, Dictionary.cls, DictionaryKeyValuePair.cls, ScriptingDictionary.cls")
 '              Optional: Reference addin Microsoft Scripting Runtime Scripting, scrrun.dll dependant on compiler constant settings.
 '@Package IDictionary.cls
@@ -97,7 +97,7 @@ End Enum
 '------------------------------------------------------------'
 Private Sub Class_Initialize()
     If Not Me Is Dictionary Then
-        Err.Raise VBA.vbObjectError, "Dictionary", "Cannot create an object instance of the Dictionary."
+        VBA.Err.Raise 429, "Dictionary", "Cannot create object Dictionary."
     End If
 End Sub
 
