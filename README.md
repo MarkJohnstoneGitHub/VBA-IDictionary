@@ -166,6 +166,8 @@ Next
 
 For Version 2.0 possibly rename the IDictionary.cls to IScriptingDictionary.cls and updating all classes implementing the IDictionary interface according.  This is to better reflect that the interface conforms to the public interface of the MS Scripting Runtime Dictionary and avoid confusion with other IDictionary implementations published.
 
+Improve performance of Unicode encoding of case-senstive keys using a read-only Integer Array Overlay.  Initial testing displays an approximately 15 percent improvement.  Require to make Mac compatibile by adding in the appropriate Mac memory API's. 
+
 Will be examining adding an IList interface to integrate the behaviour of various data structures.
 
 Possible explore typed a <TKey,TValue> Dictionary.  
