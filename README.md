@@ -1,30 +1,36 @@
-# VBA-IDictionary
+# VBA-IDictionary v2.0 July 28
 
-VBA dictionary which is Mac compatible which implements an IDictionary interface. 
+VBA dictionary which is Mac compatible which implements an IScriptingDictionary interface. 
 
 **Classes Required:**
- - [IDictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/IDictionary.cls)
+ - [IScriptingDictionary.cls]https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/IScriptingDictionary.cls)
  
  - [Dictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/Dictionary.cls)
  
  - [DictionaryKeyValuePair.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/DictionaryKeyValuePair.cls)
  
- - [ScriptingDictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/ScriptingDictionary.cls)
+ - [ScriptingDictionary.cls]( https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/ScriptingDictionary.cls)
+ 
+ - [ITextEncoding.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/ITextEncoding.cls)
+ 
+ - [TextEncoderASCII.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/TextEncoderASCII.cls)
+ 
+  - [TextEncoderUnicode.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/TextEncoderUnicode.cls)
 
    
 Optional Reference Addin:  Microsoft Scripting Runtime Scripting scrrun.dll
  
 ## Usage
 
-### Creating an IDictionary
+### Creating an IScriptingDictionary
 
-**Creating a IDictionary with Dictionary.Create()**
+**Creating a IScriptingDictionary with Dictionary.Create()**
 
-The Dictionary.cls is an IDictionary factory class.  It returns an available IDictionary implementation, according to the compiler constants and/or the IDictionary implemententation specified.  I.e. If the Scripting.Dictionary is specified and not available a DictionaryKeyValuePair will be returned.
+The Dictionary.cls is an IScriptingDictionary factory class.  It returns an available IScriptingDictionary implementation, according to the compiler constants and/or the implemententation specified.  I.e. If the Scripting.Dictionary is specified and not available a DictionaryKeyValuePair will be returned.
 
 The Dictionary.Create has three optional parameters:
 
- - dictionaryType : Specifies which IDictionary implementation to create. i.e. ScriptingDictionary or DictionaryKeyValuePairs. Default is IDictionaryType.idtScriptingDictionary
+ - dictionaryType : Specifies which IDictionary implementation to create. i.e. ScriptingDictionary or DictionaryKeyValuePairs. Default is IScriptingDictionaryType.isdtScriptingDictionary
 
  - compareMethod  : Specifies how string keys are handled either case sensitive or ignore case. Default value is vbBinaryCompare.
 
@@ -32,13 +38,13 @@ The Dictionary.Create has three optional parameters:
 
 Examples:
 
-  Dim myDictionary As IDictionary
+  Dim myDictionary As IScriptingDictionary
   
   Set myDictionary = Dictionary.Create
   
-  Set myDictionary = Dictionary.Create(IDictionaryType.IDict_Scripting, VBA.vbTextCompare)
+  Set myDictionary = Dictionary.Create(IScriptingDictionaryType.isdtScriptingDictionary, VBA.vbTextCompare)
   
-  Set myDictionary = Dictionary.Create(IDictionaryType.IDict_KeyValuePair, VBA.vbBinaryCompare, TextEncodingMethod.temAscii)
+  Set myDictionary = Dictionary.Create(IScriptingDictionaryType.isdtDictionaryKeyValuePair, VBA.vbBinaryCompare, TextEncodingMethod.temAscii)
   
 **Creating using directly a IDictionary implementation provided**
 
@@ -135,31 +141,9 @@ Only tested on the Windows platform and would be appreciated if anyone can test 
 
 ## Notes
 
-Support for keys of LongLong data type which is only availablue using the DictionaryKeyVluePair.cls IDictionary implementation and compatibile with VBA 7.
+Support for keys of LongLong data type which is only availablue using the DictionaryKeyVluePair.cls IScriptingDictionary implementation and compatibile with Mac, Windows, VBA 6, VBA 7.
 
-For VBA-IDictionary v2.1 the enumeration of DictionaryKeyValuePairs is on Keys, previously it had been on a key, value pair in a one dimensional array where the first element i.e. dictEntry(0) was the key and the second i.e. dictEntry(1) was the dictionary item.  This was changed for consistency with the Scripting.Dictionary behaviour.  Possibly in future will add an option to decided to enumerate on keys or key, value pairs.  General best practice is to specify to enumerate on Keys instead of enumerating on the dictionary object.
-
-The performance of enumerating on the tuple of key,value pairs verses enumerating on Keys to obtain its associated item would expect to be quicker, as not requesting an item via the dictionary. 
-
-Eg. *assuming only scalar values for dictionary keys and items
-
-For Each dictkey in myDictionary.Keys
-
-   dictItem = myDictionary.Item(dictkey)
-  
-Next
-
-Verses the enumeration of key,value pairs 
-
-Note only for DictionaryKeyValuePairs where if for the Property Get NewEnum() As IUnknown , Set NewEnum = this.keyItemPairs etc
-
-For Each dictEntry in myDictionary
-
-   dictKey = dictEntry(0)
-  
-   dictItem = dictEntry(1)
-  
-Next
+Untested on Mac and VBA 6. 
 
 
 ## Future Extensions
