@@ -30,7 +30,7 @@ The Dictionary.cls is an IScriptingDictionary factory class.  It returns an avai
 
 The Dictionary.Create has three optional parameters:
 
- - dictionaryType : Specifies which IDictionary implementation to create. i.e. ScriptingDictionary or DictionaryKeyValuePairs. Default is IScriptingDictionaryType.isdtScriptingDictionary
+ - dictionaryType : Specifies which IDictionary implementation to create. i.e. ScriptingDictionary or DictionaryKeyValuePairs. Default is the ScriptingDictionary.
 
  - compareMethod  : Specifies how string keys are handled either case sensitive or ignore case. Default value is vbBinaryCompare.
 
