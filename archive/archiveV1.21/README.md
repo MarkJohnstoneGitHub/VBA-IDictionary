@@ -1,15 +1,15 @@
-# VBA-IDictionary
+# Archive VBA-IDictionary v1.21 (July 15, 2019)
 
 VBA dictionary which is Mac compatible which implements an IDictionary interface. 
 
 **Classes Required:**
- - [IDictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/IDictionary.cls)
+ - [IDictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/archive/archiveV1.21/IDictionary.cls)
  
- - [Dictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/Dictionary.cls)
+ - [Dictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/archive/archiveV1.21/Dictionary.cls)
  
- - [DictionaryKeyValuePair.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/DictionaryKeyValuePair.cls)
+ - [DictionaryKeyValuePair.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/archive/archiveV1.21/DictionaryKeyValuePair.cls)
  
- - [ScriptingDictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/ScriptingDictionary.cls)
+ - [ScriptingDictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/archive/archiveV1.21/ScriptingDictionary.cls)
 
    
 Optional Reference Addin:  Microsoft Scripting Runtime Scripting scrrun.dll
@@ -72,7 +72,7 @@ The same as the [Scripting.Dictionary object](https://docs.microsoft.com/en-us/o
 
 ## Compiler Constants
 
-Note the compiler constants in the [Dictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/Dictionary.cls) and [ScriptingDictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/ScriptingDictionary.cls)
+Note the compiler constants in the [Dictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/archive/archiveV1.21/Dictionary.cls) and [ScriptingDictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/archive/archiveV1.21/ScriptingDictionary.cls)
 
 These compiler constants may require updating to True or False according to the availablity of the Scripting.Dictionary reference and platform.
 
