@@ -26,7 +26,7 @@ Optional Reference Addin:  Microsoft Scripting Runtime Scripting scrrun.dll
 
 **Creating a IScriptingDictionary with Dictionary.Create()**
 
-The Dictionary.cls is an IScriptingDictionary factory class.  It returns an available IScriptingDictionary implementation, according to the compiler constants and/or the implementation specified.  I.e. If the Scripting.Dictionary is specified and not available a DictionaryKeyValuePair will be returned.  Cannot use new and must use the Dictionary.Create method to create a IScriptingDictionary object. 
+The Dictionary.cls is an IScriptingDictionary factory class.  It returns an available IScriptingDictionary implementation, according to the compiler constants and/or the implementation specified.  I.e. If the Scripting.Dictionary is specified and not available a DictionaryKeyValuePair will be returned.  Cannot use New and must use the Dictionary.Create method to create a IScriptingDictionary object. 
 
 The Dictionary.Create has three optional parameters:
 
@@ -139,7 +139,7 @@ Only tested on the Windows platform and would be appreciated if anyone can test 
 
 ## Notes
 
-Support for keys of LongLong data type which is only availablue using the DictionaryKeyVluePair.cls and compatibile with Mac, Windows, in VBA 7.
+Support for keys of LongLong data type which is only availablue under VBA 7 using the DictionaryKeyVluePair.
 
 Untested on Mac and VBA 6. 
 
