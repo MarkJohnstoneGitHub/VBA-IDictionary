@@ -3,7 +3,7 @@
 VBA dictionary which is Mac compatible which implements an IScriptingDictionary interface. 
 
 **Classes Required:**
- - [IScriptingDictionary.cls]https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/IScriptingDictionary.cls)
+ - [IScriptingDictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/IScriptingDictionary.cls)
  
  - [Dictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/Dictionary.cls)
  
