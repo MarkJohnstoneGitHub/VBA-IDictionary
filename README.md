@@ -1,6 +1,6 @@
 # VBA-IDictionary v2.0 July 28
 
-VBA dictionary which is Mac compatible which implements an IScriptingDictionary interface. 
+VBA dictionary which is Mac compatible which implements a IScriptingDictionary interface. 
 
 **Classes Required:**
  - [IScriptingDictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/IScriptingDictionary.cls)
@@ -141,20 +141,21 @@ Only tested on the Windows platform and would be appreciated if anyone can test 
 
 ## Notes
 
-Support for keys of LongLong data type which is only availablue using the DictionaryKeyVluePair.cls IScriptingDictionary implementation and compatibile with Mac, Windows, VBA 6, VBA 7.
+Support for keys of LongLong data type which is only availablue using the DictionaryKeyVluePair.cls and compatibile with Mac, Windows, in VBA 7.
 
 Untested on Mac and VBA 6. 
 
 
-## Future Extensions
+## Version 2.0 Modifications
 
-For Version 2.0 possibly rename the IDictionary.cls to IScriptingDictionary.cls and updating all classes implementing the IDictionary interface according.  This is to better reflect that the interface conforms to the public interface of the MS Scripting Runtime Dictionary and avoid confusion with other IDictionary implementations published.
+Renamed the IDictionary.cls to IScriptingDictionary.cls and updating all classes implementing the IDictionary interface according.  This is to better reflect that the interface conforms to the public interface of the MS Scripting Runtime Dictionary and avoid confusion with other IDictionary implementations published.
 
-Improve performance of Unicode encoding of case-senstive keys using a read-only Integer Array Overlay.  Initial testing displays an approximately 15 percent improvement.  Require to make Mac compatibile by adding in the appropriate Mac memory API's. 
+Added ITextEncoding.cls, TextEncoderASCII.cls and TextEncoderUnicode.cls
 
-Will be examining adding an IList interface to integrate the behaviour of various data structures.
+Removed text encoding functions from DictionaryKeyValuePair.cls and modified to use an ITextEncoding implementation according to TextEncodingMethod specified. 
 
-Possible explore typed a <TKey,TValue> Dictionary.  
+Improved performance of Unicode encoding of case-senstive keys using a read-only Integer Array Overlay.  Initial testing displays an approximately 15 percent improvement.  
+ 
 
 
 
