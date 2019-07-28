@@ -26,11 +26,11 @@ Optional Reference Addin:  Microsoft Scripting Runtime Scripting scrrun.dll
 
 **Creating a IScriptingDictionary with Dictionary.Create()**
 
-The Dictionary.cls is an IScriptingDictionary factory class.  It returns an available IScriptingDictionary implementation, according to the compiler constants and/or the implementation specified.  I.e. If the Scripting.Dictionary is specified and not available a DictionaryKeyValuePair will be returned.
+The Dictionary.cls is an IScriptingDictionary factory class.  It returns an available IScriptingDictionary implementation, according to the compiler constants and/or the implementation specified.  I.e. If the Scripting.Dictionary is specified and not available a DictionaryKeyValuePair will be returned.  Cannot use new and must use the Dictionary.Create method to create a IScriptingDictionary object. 
 
 The Dictionary.Create has three optional parameters:
 
- - dictionaryType : Specifies which IDictionary implementation to create. i.e. ScriptingDictionary or DictionaryKeyValuePairs. Default is the ScriptingDictionary.
+ - dictionaryType : Specifies which IDictionary implementation to create. i.e. ScriptingDictionary or DictionaryKeyValuePairs. Default is the IScriptingDictionaryType.isdtScriptingDictionary.
 
  - compareMethod  : Specifies how string keys are handled either case sensitive or ignore case. Default value is vbBinaryCompare.
 
@@ -46,9 +46,9 @@ Examples:
   
   Set myDictionary = Dictionary.Create(IScriptingDictionaryType.isdtDictionaryKeyValuePair, VBA.vbBinaryCompare, TextEncodingMethod.temAscii)
   
-**Creating using directly a IDictionary implementation provided**
+**Creating using directly a IScriptingDictionary implementation provided**
 
-Two IDictionary implementations have been provided, DictionaryKeyValuePair.cls and ScriptingDictionary.cls
+Two IDictionary implementations have been provided, DictionaryKeyValuePair and ScriptingDictionary, they can be created using New or the Create method. 
  
 The ScriptingDictionary.Create() has one optional parameter:
 
@@ -64,7 +64,7 @@ The DictionaryKeyValuePair.Create() has the two optional parameters:
 
  - compareMethod : Specifies how string keys are handled either case sensitive or ignore case.  Default value is vbBinaryCompare.
  
- - encodingMethod : Specifies which encoding text method to use on case sensitive string keys i.e. Unicode or ASCII. Default value is TextEncodingMethod.temUnicode
+ - encodingMethod : Specifies which encoding text method to use on case sensitive string keys i.e. Unicode or ASCII. This parameter provides performance improvement for ASCII compatibile string keys. The default value is TextEncodingMethod.temUnicode
  
    Dim myDictionary As IDictionary 'or could use As DictionaryKeyValuePair
   
@@ -75,7 +75,6 @@ The DictionaryKeyValuePair.Create() has the two optional parameters:
 
 The same as the [Scripting.Dictionary object](https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/dictionary-object)
   
-
 ## Compiler Constants
 
 Note the compiler constants in the [Dictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/Dictionary.cls) and [ScriptingDictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/ScriptingDictionary.cls)
@@ -138,13 +137,11 @@ Unit testing can be found in TestModuleDictionaryKeyValuePair.bas within the Ms 
 
 Only tested on the Windows platform and would be appreciated if anyone can test it on the Mac platform. I don't anticipate any compatiblity issues if the compiler constants are appropriately set.
 
-
 ## Notes
 
 Support for keys of LongLong data type which is only availablue using the DictionaryKeyVluePair.cls and compatibile with Mac, Windows, in VBA 7.
 
 Untested on Mac and VBA 6. 
-
 
 ## Version 2.0 Modifications
 
@@ -154,9 +151,6 @@ Added ITextEncoding.cls, TextEncoderASCII.cls and TextEncoderUnicode.cls
 
 Removed text encoding functions from DictionaryKeyValuePair.cls and modified to use an ITextEncoding implementation according to TextEncodingMethod specified. 
 
-Improved performance of Unicode encoding of case-senstive keys using a read-only Integer Array Overlay.  Initial testing displays an approximately 15 percent improvement.  
+Improved performance of Unicode encoding of case-senstive keys using a read-only Integer Array Overlay.  Initial testing displays an approximately 15 percent improvement.  Due to using a managed variant, interupting the normal execution in debug mode, before the managed variant has been destroyed, may cause the application to crash. I.e. the TextEncoderUnicode object must be closed by setting to nothing or go out of scope naturually. 
  
-
-
-
 
