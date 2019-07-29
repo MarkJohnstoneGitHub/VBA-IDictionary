@@ -48,7 +48,7 @@ Examples:
   
 **Creating using directly a IScriptingDictionary implementation provided**
 
-Two IDictionary implementations have been provided, DictionaryKeyValuePair and ScriptingDictionary, they can be created using New or the Create method. 
+Two IScriptingDictionary implementations have been provided, DictionaryKeyValuePair and ScriptingDictionary, they can be created using New or the Create method. 
  
 The ScriptingDictionary.Create() has one optional parameter:
 
@@ -56,7 +56,7 @@ The ScriptingDictionary.Create() has one optional parameter:
  
  Example
  
-  Dim myDictionary As IDictionary 'or could use As ScriptingDictionary
+  Dim myDictionary As IScriptingDictionary 'or could use As ScriptingDictionary
   
   Set myDictionary = ScriptingDictionary.Create(VBA.vbTextCompare)
   
@@ -66,7 +66,7 @@ The DictionaryKeyValuePair.Create() has the two optional parameters:
  
  - encodingMethod : Specifies which encoding text method to use on case sensitive string keys i.e. Unicode or ASCII. This parameter provides performance improvement for ASCII compatibile string keys. The default value is TextEncodingMethod.temUnicode
  
-   Dim myDictionary As IDictionary 'or could use As DictionaryKeyValuePair
+   Dim myDictionary As IScriptingDictionary 'or could use As DictionaryKeyValuePair
   
   Set myDictionary = DictionaryKeyValuePair.Create(VBA.vbTextCompare, TextEncodingMethod.temAscii)
  
