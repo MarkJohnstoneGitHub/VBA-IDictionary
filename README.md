@@ -139,7 +139,7 @@ Only tested on the Windows platform and would be appreciated if anyone can test 
 
 ## Notes
 
-Support for keys of LongLong data type which is only availablue under VBA 7 using the DictionaryKeyVluePair.
+Support for keys of LongLong data type which is only availablue under VBA 7 using the DictionaryKeyValuePair.
 
 Untested on Mac and VBA 6. 
 
