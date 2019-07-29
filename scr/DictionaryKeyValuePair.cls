@@ -16,7 +16,7 @@ Attribute VB_Description = "A VBA alternative for the Scripting.Dictionary which
 ''
 
 ''
-'@Version VBA-IDictionary v2-0 (July 28, 2019)
+'@Version VBA-IDictionary v2.0 (July 28, 2019)
 '(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary
 '@Description A VBA alternative for the Scripting.Dictionary which is Mac compatible using the IScriptingDictionary interface.
 '@Dependencies
@@ -119,7 +119,6 @@ End Sub
 '============================================='
 'Properties
 '============================================='
-
 ''
 '@Description("Sets or returns the comparison mode for comparing string keys.")
 ' ------------------------------------------------------------'
@@ -147,9 +146,9 @@ Attribute CompareMode.VB_Description = "Sets or returns the comparison mode for 
         VBA.Err.Raise 5                          ' Invalid procedure call or argument
     Else
         If (compareMethod = VBA.vbBinaryCompare) Or _
-                                                 (compareMethod = VBA.vbTextCompare) Or _
-                                                 (compareMethod = VBA.vbDatabaseCompare) _
-                                                 Then
+           (compareMethod = VBA.vbTextCompare) Or _
+           (compareMethod = VBA.vbDatabaseCompare) _
+        Then
             this.compareMethod = compareMethod
         Else
             ' illeagal value
@@ -373,7 +372,6 @@ End Property
 '============================================='
 'Public Methods
 '============================================='
-
 ''
 '@Description("Creates a new instance of a DictionaryKeyValuePair.")
 '@param compareMethod  (Optional) The comparison mode for comparing string keys in a Dictionary object, default is vbBinaryCompare.
@@ -381,7 +379,7 @@ End Property
 '@return (DictionaryKeyValuePair)
 Public Function Create(Optional ByVal compareMethod As VBA.VbCompareMethod = VBA.vbBinaryCompare, _
                        Optional ByVal encodingMethod As TextEncodingMethod = TextEncodingMethod.temUnicode) _
-        As DictionaryKeyValuePair
+                       As DictionaryKeyValuePair
 Attribute Create.VB_Description = "Creates a new instance of a DictionaryKeyValuePair."
     Dim newDictionary As DictionaryKeyValuePair
     Set newDictionary = New DictionaryKeyValuePair
@@ -520,7 +518,6 @@ End Sub
 '============================================='
 'Private Methods
 '============================================='
-
 ''
 '@Description Returns a string collection key for a variant dictionary key.
 '@param key The key to be encoded into a string collection key.
@@ -639,14 +636,13 @@ CleanExit:
     Exit Sub
 ErrorHandler:
     'Match Scripting.Dictionary error for when key doesn't exist when being removed
-    VBA.Err.Raise 32811, "Method 'Remove' of object IScriptingDictionary failed"
+    VBA.Err.Raise 32811, "Method 'Remove' of object IDictionary failed"
     Resume CleanExit
 End Sub
 
 '============================================='
 'Interfaces
 '============================================='
-
 ' ------------------------------------------------------------'
 'IScriptingDictionary Properties
 ' ------------------------------------------------------------'
