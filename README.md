@@ -1,6 +1,6 @@
 # VBA-IDictionary v2.0 July 28
 
-VBA dictionary which is Mac compatible which implements a IScriptingDictionary interface. 
+VBA dictionary alternative to the Scripting.Dictionary which is Mac compatible which implements a IScriptingDictionary interface. 
 
 **Classes Required:**
  - [IScriptingDictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/IScriptingDictionary.cls)
@@ -26,7 +26,7 @@ Optional Reference Addin:  Microsoft Scripting Runtime Scripting scrrun.dll
 
 **Creating a IScriptingDictionary with Dictionary.Create()**
 
-The Dictionary.cls is an IScriptingDictionary factory class.  It returns an available IScriptingDictionary implementation, according to the compiler constants and/or the implementation specified.  I.e. If the Scripting.Dictionary is specified and not available a DictionaryKeyValuePair will be returned.  Cannot use New and must use the Dictionary.Create method to create a IScriptingDictionary object. 
+The Dictionary.cls is an IScriptingDictionary factory class.  It returns an available IScriptingDictionary implementation, according to the compiler constants and/or the implementation specified.  I.e. If the Scripting.Dictionary is specified and not available the DictionaryKeyValuePair will be returned.  Cannot use New and must use the Dictionary.Create method to create a IScriptingDictionary object. 
 
 The Dictionary.Create has three optional parameters:
 
@@ -105,18 +105,20 @@ On Windows if both compiler constants are set to False the Dictionary.Create use
 
 ## Advantages
 
-The VBA-IDictionary provides interfaces for the dictionary implementations provided, allowing for the easy transition when switching between dictionary implementations.  i.e. It allows for programming to an interface instead to a particular implementation which can be advantageous for unit testing.
+The VBA-IDictionary provides interfaces for the dictionary implementations provided, allowing for the easy transition when switching between dictionary implementations.  i.e. It allows for programming to an interface instead to a particular implementation which can be advantageous for unit testing etc.
 
 Added support for keys of LongLong data type which is only availablue using the DictionaryKeyVluePair.cls IDictionary implementation and compatibile with VBA 7.  This also allows using LongPtr as keys as they are converted to LongLong or Long data types for earlier versions.
+
+Significant performance compared to other VBA dictionary implementations, and in some scenerios provides a significant performance over the Scripting.Dictionary. 
 
 
 ## Performance
 
 Great consideration has been given to provide as good as possible performance while using the underlying VBA.Collection.
 
-See the Excel VBA-IDictionaryPerformance spreadhsheet for a performance comparisions of the ScriptingDictionary, DictionaryKeyValuePair and other VBA dictionary implementations.  Performance results displayed in the graphs can be filtered to compare various IDictionary implements for the various key and item data types and string key processing options provided.
+See the Excel VBA-IDictionaryPerformance spreadhsheet for a performance comparisions of the ScriptingDictionary, DictionaryKeyValuePair and other VBA dictionary implementations.  Performance results displayed in the graphs can be filtered to compare various IScriptingDictionary implementations, for the various key and item data types and string key encoding options provided.
 
-Performance testing can be performed using modules in the MS Access database provided, TestPerformanceKeyValuePairAdd.bas and TestPeformanceKeyValuePairItem.bas and results are displayed in the immediate window.  The results are currently manually copied into the peformance Excel spreadsheet using the Text Import Wizard. Those modules are still under development.
+Performance testing can be performed using  the modules in the MS Access database provided, TestPerformanceKeyValuePairAdd.bas and TestPeformanceKeyValuePairItem.bas and results are displayed in the immediate window.  The results are currently manually copied into the peformance Excel spreadsheet using the Text Import Wizard. Those modules are still under development.
 
 The DictionaryKeyValuePairs compared to other VBA dictionary implementations its significant performance improvement, especially when adding items, is likely due to not constantly maintaining an array of Items and Keys, and only populating them when requested. On future requests for Items and Keys they are only repopulated if changes have been made to the dictionary keys, and/or items.  This tradeoff results in the first iteration of Items and Keys to be fractionally slower and any subsequent requests without changes are at similar performance as not repopulated.
 
@@ -124,11 +126,11 @@ For Adding items, compared to the MS Scripting.Dictionary for datasets at approx
 
 For the scenerio for string keys and the compare mode is vbTextCompare at approximately 100,000 items it starts to outperform.
 
-Overall the performance of the DictionaryKeyValuePair has significant improvements over other VBA dictionary implementations at approximately twice the performance for small datasets, and numerous times for large ones. It appears to have a gradual linear degraduation in performance in comparision to others that appear to expotientially degrade in performance. 
+Overall the performance of the DictionaryKeyValuePair has significant improvements over other VBA dictionary implementations at approximately twice the performance for small datasets, and numerous times for large ones. It appears to have a gradual linear degraduation in performance the larger the dataset. 
 
-I haven't recently got around to pushing it limitations, thou should be reasonably capable of handling datasets of two million items within a reasonable timeframe.  The Scripting.Dictionary noticeable degrades in performance for datasets over 500,000+ items.
+I haven't recently got around to pushing it limitations, thou should be reasonably capable of handling datasets of two million items within a reasonable timeframe.  The Scripting.Dictionary noticeably degrades in performance for datasets over 500,000+ items.
 
-For datasets continaing key and/or items that are objects whatever the data structure used, VBA's appears slow at dereferening of objects and destroying them as it is single threaded.  For this requirement it's best to keep datasets under 300,000 items as it takes considerable time to clean up.  The only other work around is have large datasets containing objects to have global references and push the cleaning up process to when the application closes. 
+For datasets continaing key and/or items that are objects whatever the data structure used, VBA's appears slow at dereferening of objects and destroying them as it is single threaded.  For this requirement it's best to keep datasets under 300,000 items as it takes considerable time to clean up.  The only other work around is when have large datasets containing objects to give them global scope or keep alive and push the cleaning up process to when the application closes. 
 
 As always it's a matter of selecting the appropriate data structure for your requirements and not one suits all purposes. 
 
@@ -153,4 +155,3 @@ Removed text encoding functions from DictionaryKeyValuePair.cls and modified to 
 
 Improved performance of Unicode encoding of case-senstive keys using a read-only Integer Array Overlay.  Initial testing displays an approximately 15 percent improvement.  Due to using a managed variant, interupting the normal execution in debug mode, before the managed variant has been destroyed, may cause the application to crash. I.e. the TextEncoderUnicode object must be closed by setting to nothing or go out of scope naturually. 
  
-
