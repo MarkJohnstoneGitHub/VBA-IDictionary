@@ -34,7 +34,7 @@ The Dictionary.Create has three optional parameters:
 
  - compareMethod  : Specifies how string keys are handled either case sensitive or ignore case. Default value is vbBinaryCompare.
 
- - encodingMethod : Specifies which encoding method to use on case sensitive string keys i.e. Unicode or ASCII.  It is only applicable to the DictionaryKeyValuePairs class for improved performance, and  the option TextEncodingMethod.temAscii should only be used where string keys are ASCII compatible.  Default value is TextEncodingMethod.temUnicode.
+ - encodingMethod : Specifies which encoding method to use on case sensitive string keys i.e. Unicode or ASCII.  It is only applicable to the DictionaryKeyValuePair class for improved performance, and  the option TextEncodingMethod.temAscii should only be used where string keys are ASCII compatible.  Default value is TextEncodingMethod.temUnicode.
 
 Examples:
 
