@@ -165,6 +165,7 @@ Private Sub Class_Initialize()
 End Sub
 
 Private Sub Class_Terminate()
+    EraseSafeArray
     DisposeManagedVariant  'destroy managed variant
 End Sub
 
