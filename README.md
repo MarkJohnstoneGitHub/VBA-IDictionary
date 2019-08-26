@@ -156,5 +156,5 @@ Removed text encoding functions from DictionaryKeyValuePair.cls and modified to 
 Improved performance of Unicode encoding of case-senstive keys using a read-only Integer Array Overlay.  Initial testing displays an approximately 15 percent improvement.  Due to using a managed variant, interupting the normal execution in debug mode, before the managed variant has been destroyed, may cause the application to crash. I.e. the TextEncoderUnicode object must be closed by setting to nothing or go out of scope naturually. 
 
 ## Version 2.1 Future Modifications
-Currently working on using a managed Integer Array instead of using a managed Variant containing the Integer Array.  This should further improve the performance of encoding case sensitive string keys.  Currently still resolving some issues with creating a SafeArray thou hopefully have found a solution. 
+Currently working on using a managed Integer Array instead of using a managed Variant containing the Integer Array.  This should further improve the performance of encoding case sensitive string keys.  Currently still resolving some issues with creating a SafeArray for an Integer Array, thou hopefully have found a solution. 
  
