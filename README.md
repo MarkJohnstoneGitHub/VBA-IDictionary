@@ -158,8 +158,8 @@ Improved performance of Unicode encoding of case-senstive keys using a read-only
 ## Version 2.1 Future Modifications
 Currently working on using a managed Integer Array instead of using a managed Variant containing the Integer Array.  This should further improve the performance of encoding case sensitive string keys.  Currently still resolving some issues with creating a SafeArray for an Integer Array, thou hopefully have found a solution. 
 
-Finally have resolved issues with a creating a SafeArray descriptor for managed Integer Array and currently designinging a class for a managed Integer Array.  Version 2.1 should be completed ASAP (couple of weeks) after polishing the code and testing and implemented if indeed improves performance. 
+Finally have resolved issues with a creating a SafeArray descriptor for managed Integer Array and currently designinging a class for a for it.  Version 2.1 should be completed ASAP (couple of weeks) after polishing the code and testing and implemented, if indeed improves performance. 
 
-Testing of reading a variant containing an Integer array verses reading an Integer array is about three times slower.  Overall the encoding case sensitive string keys hopefully expecting around at least 10% improvement when implemented.
+Testing of reading a variant containing an Integer array verses reading an Integer array is about three times slower.  Overall the encoding case sensitive string keys hopefully expecting around at least 5-10% improvement when implemented.
 
 
