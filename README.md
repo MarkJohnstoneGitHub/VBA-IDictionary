@@ -160,6 +160,4 @@ Currently working on using a managed Integer Array instead of using a managed Va
 
 Finally have resolved issues with a creating a SafeArray descriptor for managed Integer Array and currently designinging a class for a for it.  Version 2.1 should be completed ASAP (couple of weeks) after polishing the code and testing and implemented, if indeed improves performance. 
 
-Testing of reading a Integer Array verses a Variant containing an Integer array is about three times quicker.  Overall the encoding case sensitive string keys hopefully expecting around at least 5-10% improvement when implemented.
-
-
+Testing of reading a Integer Array verses a Variant containing an Integer array is about three times quicker.  Overall the encoding case sensitive string keys from initial testing using a managed Integer Array displays apoproximately 3.5% performance improvement.
