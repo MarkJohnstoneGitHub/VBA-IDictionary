@@ -1,4 +1,4 @@
-# VBA-IDictionary v2.0 July 28
+# VBA-IDictionary v2.1 (September 03, 2019)
 
 VBA dictionary alternative to the Scripting.Dictionary which is Mac compatible which implements a IScriptingDictionary interface. 
 
@@ -16,7 +16,10 @@ VBA dictionary alternative to the Scripting.Dictionary which is Mac compatible w
  - [TextEncoderASCII.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/TextEncoderASCII.cls)
  
   - [TextEncoderUnicode.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/TextEncoderUnicode.cls)
+  
+  - [ManagedCharSafeArray.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/ManagedCharSafeArray.cls)
 
+  - [TypeSafeArray.bas](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/TypeSafeArray.bas)
    
 Optional Reference Addin:  Microsoft Scripting Runtime Scripting scrrun.dll
  
@@ -145,15 +148,9 @@ Support for keys of LongLong data type which is only availablue under VBA 7 usin
 
 Untested on Mac and VBA 6. 
 
-## Version 2.0 Modifications
+## Version 2.1 Modifications
+To be updated
 
-Renamed the IDictionary.cls to IScriptingDictionary.cls and updating all classes implementing the IDictionary interface according.  This is to better reflect that the interface conforms to the public interface of the MS Scripting Runtime Dictionary and avoid confusion with other IDictionary implementations published.
-
-Added ITextEncoding.cls, TextEncoderASCII.cls and TextEncoderUnicode.cls
-
-Removed text encoding functions from DictionaryKeyValuePair.cls and modified to use an ITextEncoding implementation according to TextEncodingMethod specified. 
-
-Improved performance of Unicode encoding of case-senstive keys using a read-only Integer Array Overlay.  Initial testing displays an approximately 15 percent improvement.  Due to using a managed variant, interupting the normal execution in debug mode, before the managed variant has been destroyed, may cause the application to crash. I.e. the TextEncoderUnicode object must be closed by setting to nothing or go out of scope naturually. 
 
 ## Version 2.1 Future Modifications
 Currently working on using a managed Integer Array instead of using a managed Variant containing the Integer Array.  This should further improve the performance of encoding case sensitive string keys.  Currently still resolving some issues with creating a SafeArray for an Integer Array, thou hopefully have found a solution. 
