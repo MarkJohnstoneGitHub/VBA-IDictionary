@@ -119,7 +119,7 @@ Significant performance compared to other VBA dictionary implementations, and in
 
 Great consideration has been given to provide as good as possible performance while using the underlying VBA.Collection.
 
-See the Excel VBA-IDictionaryPerformance spreadhsheet for a performance comparisions of the ScriptingDictionary, DictionaryKeyValuePair and other VBA dictionary implementations.  Performance results displayed in the graphs can be filtered to compare various IScriptingDictionary implementations, for the various key and item data types and string key encoding options provided.
+See the [Excel VBA-IDictionaryPerformance spreadhsheet](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/VBA-IDictionary%20V2-1%20Sep%2003%2C%202019%20Performance.xlsx) for a performance comparisions of the ScriptingDictionary, DictionaryKeyValuePair and other VBA dictionary implementations.  Performance results displayed in the graphs can be filtered to compare various IScriptingDictionary implementations, for the various key and item data types and string key encoding options provided.
 
 Performance testing can be performed using  the modules in the MS Access database provided, TestPerformanceKeyValuePairAdd.bas and TestPeformanceKeyValuePairItem.bas and results are displayed in the immediate window.  The results are currently manually copied into the peformance Excel spreadsheet using the Text Import Wizard. Those modules are still under development.
 
