@@ -150,13 +150,3 @@ Untested on Mac and VBA 6.
 
 ## Version 2.1 Modifications
 To be updated
-
-
-## Version 2.1 Future Modifications
-Currently working on using a managed Integer Array instead of using a managed Variant containing the Integer Array.  This should further improve the performance of encoding case sensitive string keys.  Currently still resolving some issues with creating a SafeArray for an Integer Array, thou hopefully have found a solution. 
-
-Finally have resolved issues with a creating a SafeArray descriptor for managed Integer Array and currently designinging a class for a for it.  Version 2.1 should be completed ASAP after polishing the code and testing and implemented, if indeed improves performance. 
-
-Testing of reading a Integer Array verses a Variant containing an Integer array is about three times quicker.  Overall the encoding case sensitive string keys from initial testing using a managed Integer Array displays approximately 3.5% performance improvement.
-
-The managed Integer Array class developing some may find very interesting.  It's implemented with only limited use of the CopyMemory API to  write the SafeArray pointer of SafeArrayDescriptor structure to the managed Integer Array without using the SafeArray API to create the SafeArrayDescriptor, which also makes it Mac compatible. 
