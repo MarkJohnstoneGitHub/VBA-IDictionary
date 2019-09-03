@@ -37,8 +37,8 @@ Option Explicit
 Implements ITextEncoding
 
 Private Type TUnicodeTextEncoder
-    managedCharDescriptor As ManagedCharSafeArray 'managed safe array descriptor for managedChar
-    managedChar() As Integer                 'managed character array containing unicode of string in integer form.
+    managedCharsDescriptor As ManagedCharSafeArray 'managed safe array descriptor for managedChar
+    managedChars() As Integer                 'managed character array containing unicode of string in integer form.
 End Type
 
 '============================================='
@@ -50,12 +50,12 @@ Private this As TUnicodeTextEncoder
 'Constructors and destructors
 '============================================='
 Private Sub Class_Initialize()
-    Set this.managedCharDescriptor = New ManagedCharSafeArray
-    this.managedChar = this.managedCharDescriptor.ManagedCharArray
+    Set this.managedCharsDescriptor = New ManagedCharSafeArray
+    this.managedChars = this.managedCharsDescriptor.ManagedCharArray
 End Sub
 
 Private Sub Class_Terminate()
-    this.managedCharDescriptor.FreeManagedCharArray this.managedChar
+    this.managedCharsDescriptor.FreeManagedCharArray this.managedChars
 End Sub
 
 '============================================='
@@ -75,13 +75,13 @@ Attribute ToHexString.VB_Description = "Converts a string to unicode hex string.
     Const HEX_CHARACTER_LENGTH As Long = 4      'Each string character is represented by four UTF-16 hexidemial characters.
     Const HEX_CHARACTER_PADDING As Long = 65536 'Ensures that four hex characters are obtained with 0 padding
     
-    this.managedCharDescriptor.AllocateCharData inText 'Allocate string data to managedChar array
+    this.managedCharsDescriptor.AllocateCharData inText 'Allocate string data to managedChar array
     'Allocate the hex string buffer according to specified string size, where each string character converts to four hex characters
-    ToHexString = VBA.Space$(HEX_CHARACTER_LENGTH * (UBound(this.managedChar) - LBound(this.managedChar) + 1))
+    ToHexString = VBA.Space$(HEX_CHARACTER_LENGTH * (UBound(this.managedChars) - LBound(this.managedChars) + 1))
     
     Dim charIndex As Long
-    For charIndex = LBound(this.managedChar) To UBound(this.managedChar)
-        Mid$(ToHexString, (charIndex * HEX_CHARACTER_LENGTH) + 1, HEX_CHARACTER_LENGTH) = VBA.Right$(VBA.Hex(HEX_CHARACTER_PADDING Or this.managedChar(charIndex)), HEX_CHARACTER_LENGTH)
+    For charIndex = LBound(this.managedChars) To UBound(this.managedChars)
+        Mid$(ToHexString, (charIndex * HEX_CHARACTER_LENGTH) + 1, HEX_CHARACTER_LENGTH) = VBA.Right$(VBA.Hex(HEX_CHARACTER_PADDING Or this.managedChars(charIndex)), HEX_CHARACTER_LENGTH)
     Next
 End Function
 
