@@ -160,7 +160,7 @@ Possibily would require expanding to more persisent use of managed arrays for ma
 
 Would involve some careful analysis first as there's also the consideration of the SafeArray.pvData going out of scope and causing stability issues for the validity of the managed char array if accessed with an invalid pvData pointer.   
 
-Initial conclusion the managed Char array is likely to be inappropriate to have an extended persistence due to potiential issues with the allocated string data i.e. SafeArray.pvData persistence.  The current usaged for a managed char array created must be freed before it goes out of scope, and also before the manged char array descriptor goes out of scope. 
+Initial conclusion the managed Char array is likely to be inappropriate to have an extended persistence due to potiential issues with the allocated string data i.e. SafeArray.pvData persistence.  The current usage for a managed char array created must be freed before it goes out of scope, and also before the manged char array descriptor goes out of scope. 
 
 If extended persistence of the managed char array is required then the array contents and descriptor will be required to copied.  This should easily enough done by assigning it to an unmanaged Integer Array (i.e. created by VBA).
 eg 
