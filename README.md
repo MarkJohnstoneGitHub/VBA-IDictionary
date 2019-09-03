@@ -151,8 +151,6 @@ Untested on Mac and VBA 6.
 ## Version 2.1 Modifications
 For performance improvements removed the use of a managed variant containing an Integer array to use a managed Integer Array.  Overall result was a slight performance improvement of approximately 5% for processing case-sensitive string keys.
 
-Removed use of a managed variant contianing an Integer array from TextEncoderUnicode.cls 
-
 Updated TextEncoderUnicode  ToHexString function to use a managed Char array which is manually freed when the class goes out of scope.
 
 Added ManagedCharSafeArray.cls 
