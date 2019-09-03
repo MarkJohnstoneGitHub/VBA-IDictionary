@@ -151,22 +151,3 @@ Untested on Mac and VBA 6.
 ## Version 2.1 Modifications
 Added ManagedCharSafeArray.cls and TypeSafeArray.bas
 Removed use of a managed variant contianing an Integer array from TextEncoderUnicode.cls and updated the ToHexString function to use a managed char array.
-
-## Future Modifications
-(Move notes below regaring ManagedCharSafeArray.cls to it's own readme as not directly related to the IDictionary project.)
-ManagedCharSafeArray.cls 
-Anticipate issues if a managed Char array was stored in another structure eg a Collection etc and require to clean up at a later time. 
-Possibily would require expanding to more persisent use of managed arrays for managing deferencing of managed arrays. This would involve mantaining a collection of managed arrays in use and their associated managed safe array descriptor. 
-
-Would involve some careful analysis first as there's also the consideration of the SafeArray.pvData going out of scope and causing stability issues for the validity of the managed char array if accessed with an invalid pvData pointer.   
-
-Initial conclusion the managed Char array is likely to be inappropriate to have an extended persistence due to potiential issues with the allocated string data i.e. SafeArray.pvData persistence.  The current usage for a managed char array created must be freed before it goes out of scope, and also before the manged char array descriptor goes out of scope. 
-
-If extended persistence of the managed char array is required then the array contents and descriptor will be required to copied.  This should easily enough done by assigning it to an unmanaged Integer Array (i.e. created by VBA).
-eg 
-   'Already created managed array etc see ManagedCharSafeArray.cls for usage example
-   '....
-   Dim unMangedIntegerArray() as Integer
-   unMangedIntegerArray = mangedCharArray (creates a copy of the structure and contents of the managedCharArray
-   '... free managed char array when no longer required
-   
