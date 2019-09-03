@@ -153,4 +153,4 @@ Added ManagedCharSafeArray.cls and TypeSafeArray.bas
 
 Removed use of a managed variant contianing an Integer array from TextEncoderUnicode.cls 
 
-TextEncoderUnicode updated the ToHexString function to use a managedCharArray which is manually freed when the class goes out of scope.
+TextEncoderUnicode updated the ToHexString function to use the ManagedCharArray which is manually freed when the class goes out of scope.
