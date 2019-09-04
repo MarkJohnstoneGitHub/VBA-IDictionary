@@ -179,5 +179,4 @@ MangedCharSafeArray was restructured to more appropriately associate the managed
  ## Future Modifications
  I don't antipicate any major future modifications excluding comment updates, unless untested compatibility issues are identified for Mac or VBA 6 which cannot test.  This is likely to be a final release and resume other VBA projects. X fingers
  
-From the intial release have improved the performance of processing case-senstive string keys by appropriately 20% and limited opportunities for future performance improvements.  Any suggestions for performance improvements are highly welcomed. :)
-
+From the initial release have improved the performance of processing case-senstive string keys by appropriately 20% and there are limited opportunities for future performance improvements.  Any suggestions for performance improvements or issues are highly welcomed. :)
