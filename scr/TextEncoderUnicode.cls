@@ -20,7 +20,7 @@ Attribute VB_Description = "A Unicode text encoder that converts a string to a u
 '@Version VBA-IScriptingDictionary v2.1 (September 02, 2019)
 '(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary
 '@Author Mark Johnstone markjohnstone@hotmail.com
-'@LastModified September 02, 2019
+'@LastModified September 05, 2019
 '@Description Converts a string to a unicode hex string using a read-only integer array overlay.
 ''@Dependencies
 '   ManagedCharSafeArray.cls
@@ -37,8 +37,8 @@ Option Explicit
 Implements ITextEncoding
 
 Private Type TUnicodeTextEncoder
-    managedCharsDescriptor As ManagedCharSafeArray 'managed safe array descriptor for managedChar
-    managedChars() As Integer                 'managed character array containing unicode of string in integer form.
+    managedCharsSafeArrayDescriptor As ManagedCharSafeArray 'managed safe array descriptor which is assigned to the managedChars array
+    managedChars() As Integer                               'managed character array containing Unicode characters for a string specified.
 End Type
 
 '============================================='
@@ -50,12 +50,11 @@ Private this As TUnicodeTextEncoder
 'Constructors and destructors
 '============================================='
 Private Sub Class_Initialize()
-    Set this.managedCharsDescriptor = New ManagedCharSafeArray
-    this.managedChars = this.managedCharsDescriptor.ManagedCharArray
+    Set this.managedCharsSafeArrayDescriptor = ManagedCharSafeArray.Create(this.managedChars)
 End Sub
 
 Private Sub Class_Terminate()
-    this.managedCharsDescriptor.FreeManagedCharArray this.managedChars
+    this.managedCharsSafeArrayDescriptor.Dispose
 End Sub
 
 '============================================='
@@ -75,7 +74,7 @@ Attribute ToHexString.VB_Description = "Converts a string to unicode hex string.
     Const HEX_CHARACTER_LENGTH As Long = 4      'Each string character is represented by four UTF-16 hexidemial characters.
     Const HEX_CHARACTER_PADDING As Long = 65536 'Ensures that four hex characters are obtained with 0 padding
     
-    this.managedCharsDescriptor.AllocateCharData inText 'Allocate string data to managedChar array
+    this.managedCharsSafeArrayDescriptor.AllocateCharData inText 'Allocate string data to managedChar array
     'Allocate the hex string buffer according to specified string size, where each string character converts to four hex characters
     ToHexString = VBA.Space$(HEX_CHARACTER_LENGTH * (UBound(this.managedChars) - LBound(this.managedChars) + 1))
     
