@@ -166,7 +166,7 @@ Added TypeSafeArray.bas
   - Updated: [ManagedCharSafeArray.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/ManagedCharSafeArray.cls)
   
 
-MangedCharSafeArray was restructed to more appropriately associate the managed Char array with its SafeArray descriptor allocated. This was to ensure only that the SafeArray descriptor is allocated to only one managed Char array at a time.
+MangedCharSafeArray was restructured to more appropriately associate the managed Char array with its SafeArray descriptor allocated. This was to ensure only that the SafeArray descriptor is allocated to only one managed Char array at a time.
   
   - Updated to predeclared class and added a Create method. ie. 
  
