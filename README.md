@@ -179,4 +179,6 @@ MangedCharSafeArray was restructured to more appropriately associate the managed
  ## Future Modifications
  I don't antipicate any major future modifications excluding comment updates, unless untested compatibility issues are identified for Mac or VBA 6 which cannot test.  This is likely to be a final release and resume other VBA projects. X fingers
  
+Possible updates may occur to the TypeSafeArray.bas when expanded for other other projects requirements and maybe the TextEncoding class could be renamed more appropriately to avoid confusion with similar classes. 
+ 
 From the initial release have improved the performance of processing case-senstive string keys by appropriately 20% and there are limited opportunities for future performance improvements.  Any suggestions for performance improvements or issues are highly welcomed.
