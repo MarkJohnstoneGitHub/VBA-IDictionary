@@ -159,7 +159,7 @@ Added TypeSafeArray.bas
 
 ## Version 2.1 Future Modifications
 For [ManagedCharSafeArray.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/ManagedCharSafeArray.cls)
-concerned about potiential issues with its misuse and aim to more closely tie the managed chars array specified with its SafeArray descriptor created. i.e. The descriptor should only be associated with one managed array.
+concerned about potiential issues with its misuse and aim to more closely tie the managed chars array specified with its SafeArray descriptor created. i.e. The Safe Array descriptor should only be associated with one managed array.
 
 The Get Property will be removed and replaced with a Let Property.  i.e Public Property Let ManagedCharArray(ByRef outManagedChars() As Integer)
 
