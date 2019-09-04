@@ -157,3 +157,15 @@ Added ManagedCharSafeArray.cls
 
 Added TypeSafeArray.bas
 
+## Version 2.1 Future Modifications
+For [ManagedCharSafeArray.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/ManagedCharSafeArray.cls)
+concerned about potiential issues with its misuse and aim to more closely tie the managed chars array specified with its SafeArray descriptor created. i.e. The descriptor should only be associated with one managed array.
+
+The Get Property will be removed and replaced with a Let Property.  i.e Public Property Let ManagedCharArray(ByRef outManagedChars() As Integer)
+
+A Create() function ie. Function Create(ByRef outCharsArray() As Integer) As ManagedCharSafeArray will be added.
+
+This should ensure that the SafeArray descriptor is only allocated once to the unitialized managedChars array specified.
+To be implemented once testing is performed. 
+
+Current won't effect the IDictionary project and only if the MangedCharSafeArray class is reused elsewhere. 
