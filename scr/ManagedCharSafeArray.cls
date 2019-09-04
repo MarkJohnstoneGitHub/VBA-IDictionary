@@ -23,7 +23,7 @@ Attribute VB_Description = "Managed array of characters stored within a Integer 
 '@Dependencies
 '   TypeSafeArray.bas
 '@Author Mark Johnstone markjohnstone@hotmail.com
-'@LastModified September 02, 2019
+'@LastModified September 04, 2019
 '
 '@Usage eg Display the Unicode characters of a string
 '    Dim managedCharDescriptor As ManagedCharSafeArray
@@ -59,9 +59,9 @@ Option Explicit
 'Constants
 '============================================='
 #If VBA7 Then
-    Private Const vbNullPtr As LongPtr = 0
+    Private Const NULL_PTR As LongPtr = 0
 #Else
-    Private Const vbNullPtr As Long = 0
+    Private Const NULL_PTR As Long = 0
 #End If
 
 Private Const SIZEOF_VBAINTEGER As Long = 2
@@ -244,11 +244,11 @@ Attribute FreeManagedCharArray.VB_Description = "Frees the managed characer arra
     pIntegerArray = VarPtrArray(outIntegerArray)
     CopyMemoryByPtr VarPtr(pSafeArray), pIntegerArray, LenB(pSafeArray)
     If pSafeArray = VarPtr(this.integerSafeArray) Then
-        CopyAnyToMemory pIntegerArray, vbNullPtr, LenB(pIntegerArray)
+        CopyAnyToMemory pIntegerArray, NULL_PTR, LenB(pIntegerArray)
         SafeArrayUnLock
     Else
-        'Can only free arrays attached to the managed SafeArrayDescriptor structure."
-        VBA.Err.Raise 5, "ManagedCharSafeArray FreeMangedCharArray", "Can only free an array which is managed for its own descriptor"
+        'Can only free arrays attached to associated managed SafeArray descriptor."
+        VBA.Err.Raise 5, "ManagedCharSafeArray FreeMangedCharArray", "Can only free an managed array for its associated SafeArray descriptor"
     End If
 End Sub
 
@@ -271,13 +271,14 @@ End Sub
 '------------------------------------------------------------'
 Private Sub DisposeData()
 Attribute DisposeData.VB_Description = "Disposes of the SafeArray.pvData by setting a null pointer and resets the number of elements to zero"
-    this.integerSafeArray.pvData = vbNullPtr
+    this.integerSafeArray.pvData = NULL_PTR
     this.integerSafeArray.cElements = 0
 End Sub
 
 ''
 '@Description("Increments the locks the Safe Array to disallow resizing etc.")
 '@Remarks
+' If any array locks are still in place there are unfreed managed arrays.
 '@Error VBA.vbObjectError Raised when exceed the maximum allowed number of locks on an SafeArray.
 '------------------------------------------------------------'
 Private Sub SafeArrayLock()
@@ -291,7 +292,7 @@ Attribute SafeArrayLock.VB_Description = "Increments the locks the Safe Array to
 End Sub
 
 ''
-'@Description("Returns an initialized, locked and empty, managed Integer Array which must be freed calling FreeManagedCharArray before going out of scope.")
+'@Description("Decrements any locks the Safe Array ")
 '@Remarks
 '------------------------------------------------------------'
 Private Sub SafeArrayUnLock()
