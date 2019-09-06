@@ -18,11 +18,11 @@ Attribute VB_Description = "Creates a SafeArray descriptor to be associated with
 ''
 '@Version VBA-IScriptingDictionary v2.1 (September 02, 2019)
 '(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary
-'@Description Creates a managed Integer Array to overlay a string into the SafeArray.pvData
+'@Description Creates a managed Char Array where a specified string is overlayed into the SafeArray.pvData
+'@Author Mark Johnstone markjohnstone@hotmail.com
+'@LastModified September 07, 2019
 '@Dependencies
 '   TypeSafeArray.bas
-'@Author Mark Johnstone markjohnstone@hotmail.com
-'@LastModified September 05, 2019
 '
 '@Usage eg Display the Unicode characters of a string
 '    Dim managedChars() As Integer
@@ -37,15 +37,24 @@ Attribute VB_Description = "Creates a SafeArray descriptor to be associated with
 '    Next
 '    managedCharsDescriptor.Dispose
 '
+'Errors Raised:
+'@Error 10  This array is fixed or temporary locked.
+'           Raised when the managedChars array is attempted to resized as it is locked.
+'
 '@Remarks
-' The Integer/managed Char array specified must be uninitialize to allow a SafeArray descriptor to be allocated.
-' The calling code cann't resize the integer array returned as it is locked, however the array contents may be altered.
-' The SafeArray descriptor should be freed from the array by calling the Dispose method, this is
-' to ensure that it is freed before the array goes out of scope.
-' Each integer element in the Char Array represents a Unicode character
-' for the specified string using the method AllocateCharData.
-' The managed Char Array manipulates a SafeArrayDescriptor without the use
+' The ManagedCharSafeArray manipulates a SafeArray descriptor without the use
 ' of the SafeArray API.
+' Each integer element in the managed Char Array represents a Unicode character
+' for the specified string using the method AllocateCharData.
+' The Integer/managed Char array specified must be uninitialize,
+' to allow a SafeArray descriptor to be allocated.
+' The calling code cannot resize the integer array returned as it is locked,
+' however the array contents may be altered.
+' Attempting to resize the managed Chars array will result in the
+' Runtime Error 10 This array is fixed or temporary locked.
+' The SafeArray descriptor should be freed from the array by calling the
+' Dispose method, this is to ensure that it is freed before
+' the managed chars array goes out of scope.
 '
 ' For futher reading regarding the SafeArray descriptor see:
 ' https://doxygen.reactos.org/db/d60/dll_2win32_2oleaut32_2safearray_8c_source.html
@@ -63,8 +72,7 @@ Option Explicit
     Private Const NULL_PTR As Long = 0
 #End If
 
-Private Const SIZEOF_VBAINTEGER As Long = 2
-Private Const MAX_SAFEARRAY_cLock As Long = 16384  '/* Maximum of 16384 locks at a time */
+Private Const SIZEOF_VBA_INTEGER As Long = 2
 
 '============================================='
 'API Declarations
@@ -159,26 +167,26 @@ Private Const MAX_SAFEARRAY_cLock As Long = 16384  '/* Maximum of 16384 locks at
 'Types
 '============================================='
 Private Type TSafeArrayDescriptor
-    vt(15) As Byte                                   'Array variable type of 16 bytes which precedes the SafeArray pointer.
-    charSafeArray As SafeArray1D                     'SafeArray Structure for one dimensional array.
+    vt(15) As Byte                              'Array variable type of 16 bytes which precedes the SafeArray pointer.
+    charSafeArray As SafeArray1D                'SafeArray Structure for one dimensional array.
 End Type
 
 #If VBA7 Then
-    Private Type TManagedCharSafeArray
-        SafeArrayDescriptor As TSafeArrayDescriptor  'SafeArray descriptor structure for a one dimensional Integer array.
-        pManagedChars As LongPtr                     'Pointer to managed Char array associated with the SafeArray descriptor.
+    Private Type TManagedCharArray
+        saDescriptor As TSafeArrayDescriptor    'SafeArray descriptor structure for a one dimensional Integer array.
+        pManagedChars As LongPtr                'Pointer to managed Char array associated with the SafeArray descriptor.
     End Type
 #Else
-    Private Type TManagedCharSafeArray
-        SafeArrayDescriptor As TSafeArrayDescriptor  'SafeArray descriptor structure for a one dimensional Integer array.
-        pManagedChars As Long                        'Pointer to managed Char array associated with the SafeArray descriptor.
+    Private Type TManagedCharArray
+        saDescriptor As TSafeArrayDescriptor    'SafeArray descriptor structure for a one dimensional Integer array.
+        pManagedChars As Long                   'Pointer to managed Char array associated with the SafeArray descriptor.
     End Type
 #End If
 
 '============================================='
 'Private Variables
 '============================================='
-Private this As TManagedCharSafeArray
+Private this As TManagedCharArray
 
 '============================================='
 'Constructors and destructors
@@ -197,29 +205,34 @@ End Sub
 
 ''
 '@Description("Creates a new instance of a ManagedCharSafeArray for the managed Char array specified.")
+'@param outManagedChars()  The uninitialised managed Char array to be allocated a SafeArray descriptor.
 '@Remarks
 ' The Integer array specified must be uninitialize to allow a SafeArray descriptor to be allocated.
 '------------------------------------------------------------'
-Public Function Create(ByRef outCharsArray() As Integer) As ManagedCharSafeArray
+Public Function Create(ByRef outManagedChars() As Integer) As ManagedCharSafeArray
 Attribute Create.VB_Description = "Creates a new instance of a ManagedCharSafeArray for the managed Char array specified."
-    Dim managedChars As ManagedCharSafeArray
-    Set managedChars = New ManagedCharSafeArray
-    managedChars.SafeArrayAllocateToCharArray outCharsArray
-    Set Create = managedChars
+    Dim newManagedCharSafeArray  As ManagedCharSafeArray
+    Set newManagedCharSafeArray = New ManagedCharSafeArray
+    newManagedCharSafeArray.AllocateSafeArrayToCharArray outManagedChars
+    Set Create = newManagedCharSafeArray
 End Function
 
 ''
-'@Description("Allocatate the specified string data to the SafeArray.pvData")
+'@Description("Allocatates the specified string data to the managed Char array.")
+'@param inText The specified string to be allocated to the managed Char array SafeArray.pvData
+'@Remarks
+' For the specified String updates the SafeArray.pvData and the SafeArray.cElements
+' according to its character length.
 '------------------------------------------------------------'
 Public Sub AllocateCharData(ByRef inText As String)
 Attribute AllocateCharData.VB_Description = "Allocatate the specified string data to the SafeArray.pvData"
-    this.SafeArrayDescriptor.charSafeArray.pvData = StrPtr(inText)
-    this.SafeArrayDescriptor.charSafeArray.cElements = Len(inText)
+    this.saDescriptor.charSafeArray.pvData = StrPtr(inText)
+    this.saDescriptor.charSafeArray.cElements = Len(inText)
 End Sub
 
 ''
 '@Description("Allocates the SafeArray descriptor to the specified managed Char array.")
-'@param outManagedChars The uninitialised Integer array which is allocated a SafeArray descriptor.
+'@param outManagedChars The uninitialised managed Char array to be allocated a SafeArray descriptor.
 '@Remarks
 ' The Integer array specified must be uninitialize to allow a SafeArray descriptor to be allocated.
 ' The calling code cann't resize the integer array returned as it is locked,
@@ -230,8 +243,8 @@ End Sub
 '           Raised when the SafeArray descriptor has already been allocated to a managed Char array.
 '           Raised when the managed Char array specified isn't an unitialised Integer Array.
 '------------------------------------------------------------'
-Public Sub SafeArrayAllocateToCharArray(ByRef outManagedChars() As Integer)
-Attribute SafeArrayAllocateToCharArray.VB_Description = "Allocates the SafeArray descriptor to the specified managed Char array."
+Public Sub AllocateSafeArrayToCharArray(ByRef outManagedChars() As Integer)
+Attribute AllocateSafeArrayToCharArray.VB_Description = "Allocates the SafeArray descriptor to the specified managed Char array."
     #If VBA7 Then
         Dim pOutManagedChars As LongPtr
         '@Ignore VariableNotAssigned
@@ -240,57 +253,61 @@ Attribute SafeArrayAllocateToCharArray.VB_Description = "Allocates the SafeArray
         Dim pOutManagedChars As Long
         Dim pSafeArray As Long
     #End If
-
-    'Obtain the array pointer of managedChars
+    'Obtain the array pointer of outManagedChars
     pOutManagedChars = VarPtrArray(outManagedChars())
-    'Obtain the SafeArray pointer of managedChars
+    'Obtain the SafeArray pointer of outManagedChars
     CopyMemoryByPtr VarPtr(pSafeArray), pOutManagedChars, LenB(pSafeArray)
-    
-    'Assign the SafeArray descriptor to an unitialize integer array
+    'Allocate the SafeArray descriptor to the specified unitialize integer array
     If pSafeArray = NULL_PTR Then
-        'A SafeArray descriptor can only be associated with only one managed char array at a time
+        'The SafeArray descriptor can only be allocted to one managed Char array at a time
         If this.pManagedChars = NULL_PTR Then
             #If VBA7 Then
                 Dim pNewSafeArray As LongPtr
             #Else
                 Dim pNewSafeArray As Long
             #End If
-            pNewSafeArray = VarPtr(this.SafeArrayDescriptor.charSafeArray)
-            SafeArrayLock 'lock the array from being resized
-            'Copy by reference the SafeArray pointer from the SA descriptor to the managed chars array pointer
+            pNewSafeArray = VarPtr(this.saDescriptor.charSafeArray)
+            'Copy the new SafeArray pointer to the managed chars array
             CopyMemoryByPtr pOutManagedChars, VarPtr(pNewSafeArray), LenB(this.pManagedChars)
             'set the managed Char array pointer that is associated with the SafeArray descriptor
             this.pManagedChars = pOutManagedChars
         Else
-            VBA.Err.Raise 5, "ManagedCharSafeArray ManagedCharArray", "The SafeArray descriptor has already been assigned to a managed Char array."
+            VBA.Err.Raise 5, "ManagedCharSafeArray.AllocateSafeArrayToCharArray", "The SafeArray descriptor has already been allocated to a managed Char array."
         End If
     Else
-        VBA.Err.Raise 5, "ManagedCharSafeArray ManagedCharArray", "Cannot assign an initialise array to the managed array."
+        VBA.Err.Raise 5, "ManagedCharSafeArray.AllocateSafeArrayToCharArray", "Cannot assign an initialise Integer array to the managed Char array."
     End If
 End Sub
 
 ''
-'@Description("Creates an initialized and empty SafeArray descriptor for a one dimensional Integer array.")
+'@Description("Disposes of the SafeArray descriptor from the managed Char array.")
+'------------------------------------------------------------'
+Public Sub Dispose()
+Attribute Dispose.VB_Description = "Disposes of the SafeArray descriptor from the managed Char array."
+    DisposeData
+    DisposeManagedCharArray
+End Sub
+
+'============================================='
+'Private Methods
+'============================================='
+
+''
+'@Description("Creates initialized and empty SafeArray descriptor for a one dimensional Integer array, which is locked.")
 '@Remarks
+' Creates the managed Chars SafeArray descriptor for a read-only, one dimensional Integer array, which
+' is only resized and char data added calling the AllocateCharData method.
 ' The four byte DWord preceding the SafeArray pointer containts the Variable Type
 ' of an Array when fFeatures = FADF_HAVEVARTYPE is set.
 '------------------------------------------------------------'
 Private Sub CreateSafeArrayDescriptor()
-Attribute CreateSafeArrayDescriptor.VB_Description = "Creates an initialized and empty SafeArray descriptor for a one dimensional Integer array."
-    this.SafeArrayDescriptor.vt(12) = CByte(SAFEARRAY_VT.VT_INTEGER)        'The four byte DWord contains the array variable type/
-    this.SafeArrayDescriptor.charSafeArray.cbElements = SIZEOF_VBAINTEGER
-    this.SafeArrayDescriptor.charSafeArray.cDims = 1
-    this.SafeArrayDescriptor.charSafeArray.fFeatures = SafeArrayFeatures.FADF_HAVEVARTYPE
-End Sub
-
-''
-'@Description("Disposes of the SafeArray descriptor from the managed Char array and clears the SafeArray.pvData and resizes to 0 elements.")
-'------------------------------------------------------------'
-Public Sub Dispose()
-Attribute Dispose.VB_Description = "Disposes of the SafeArray descriptor from the managed Char array and clears the SafeArray.pvData and resizes to 0 elements."
-    DisposeData
-    DisposeManagedSafeArray
-    SafeArrayUnLock
+Attribute CreateSafeArrayDescriptor.VB_Description = "Creates initialized and empty SafeArray descriptor for a one dimensional Integer array, which is locked."
+    'The last four byte DWord contains the array variable type for fFeatures = FADF_HAVEVARTYPE
+    this.saDescriptor.vt(12) = CByte(SAFEARRAY_VT.VT_INTEGER)
+    this.saDescriptor.charSafeArray.cbElements = SIZEOF_VBA_INTEGER
+    this.saDescriptor.charSafeArray.cDims = 1  'One dimensional
+    this.saDescriptor.charSafeArray.fFeatures = SafeArrayFeatures.FADF_HAVEVARTYPE
+    this.saDescriptor.charSafeArray.cLocks = 1 'lock the array from being resized
 End Sub
 
 ''
@@ -298,50 +315,17 @@ End Sub
 '------------------------------------------------------------'
 Private Sub DisposeData()
 Attribute DisposeData.VB_Description = "Disposes of the SafeArray.pvData by setting a null pointer and resets the number of elements to zero"
-    this.SafeArrayDescriptor.charSafeArray.pvData = NULL_PTR
-    this.SafeArrayDescriptor.charSafeArray.cElements = 0
+    this.saDescriptor.charSafeArray.pvData = NULL_PTR
+    this.saDescriptor.charSafeArray.cElements = 0
 End Sub
 
 ''
 '@Description("Disposes of the SafeArray descriptor from its associated managed Char array.")
 '------------------------------------------------------------'
-Private Sub DisposeManagedSafeArray()
-Attribute DisposeManagedSafeArray.VB_Description = "Disposes of the SafeArray descriptor from its associated managed Char array."
+Private Sub DisposeManagedCharArray()
+Attribute DisposeManagedCharArray.VB_Description = "Disposes of the SafeArray descriptor from its associated managed Char array."
     If Not this.pManagedChars = NULL_PTR Then
         CopyAnyToMemory this.pManagedChars, NULL_PTR, LenB(this.pManagedChars)
         this.pManagedChars = NULL_PTR
     End If
 End Sub
-
-''
-'@Description("Sets the SafeArray.clocks to disallow array resizing.")
-'@Remarks
-'@Error VBA.vbObjectError Raised when a lock already in use.
-'------------------------------------------------------------'
-Private Sub SafeArrayLock()
-Attribute SafeArrayLock.VB_Description = "Sets the SafeArray.clocks to disallow array resizing."
-    If this.SafeArrayDescriptor.charSafeArray.cLocks = 0 Then
-        this.SafeArrayDescriptor.charSafeArray.cLocks = 1
-    Else
-        Err.Raise VBA.vbObjectError, "MamagedCharSafeArray, SafeArrayLock", "Managed Char array descriptor is already allocated"
-    End If
-End Sub
-
-''
-'@Description("Releases any locks on the Safe Array descriptor.")
-'------------------------------------------------------------'
-Private Sub SafeArrayUnLock()
-Attribute SafeArrayUnLock.VB_Description = "Releases any locks on the Safe Array descriptor."
-    If Not this.SafeArrayDescriptor.charSafeArray.cLocks = 0 Then
-        this.SafeArrayDescriptor.charSafeArray.cLocks = 0
-    End If
-End Sub
-
-
-
-
-
-
-
-
-
