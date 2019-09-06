@@ -38,6 +38,9 @@ Attribute VB_Description = "Creates a SafeArray descriptor to be associated with
 '    managedCharsDescriptor.Dispose
 '
 'Errors Raised:
+'@Error 5   Invalid procedure call or argument
+'           Raised when the SafeArray descriptor has already been allocated to a managed Char array.
+'           Raised when the managed Char array specified isn't an unitialised Integer Array.
 '@Error 10  This array is fixed or temporary locked.
 '           Raised when the managedChars array is attempted to resized as it is locked.
 '
