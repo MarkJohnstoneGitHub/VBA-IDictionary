@@ -1,6 +1,6 @@
 # VBA-IDictionary v2.1 (September 03, 2019)
 
-VBA dictionary alternative to the Scripting.Dictionary which is Mac compatible which implements a IScriptingDictionary interface. 
+VBA dictionary alternative to the [Scripting.Dictionary](https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/dictionary-object) which is Mac compatible which implements a IScriptingDictionary interface to allow for various dictionary implementations. 
 
 **Classes Required:**
  - [IScriptingDictionary.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/IScriptingDictionary.cls)
