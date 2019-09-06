@@ -177,15 +177,6 @@ MangedCharSafeArray was restructured to more appropriately associate the managed
     Public Sub SafeArrayAllocateToCharArray(ByRef outManagedChars() As Integer)
     
  ## Future Modifications
-Possibly could slightly improve performance when calling the TextEncoding.Encode when converting a variant to a string.  Most likely what is occurring with the CStr() function is a new string is created.  If so, could use a mangaged String to cast a Variant containg a String by copying the String pointer only.
- 
-Exploring using a managed String to replace CStr(inVariantText) to Cast as Variant to a string without copying the String contents.
-Performance improvements are dependent on the length of the string key.  Coding for a managed String has been compeleted and currently performing testing.
-
-Update initial testing using a managed String is showing it wasn't a good idea,  far from it.  Probably due to the overheads of calling the CopyMemory API. And unlikely/won't be implemented.
-
-Only other possibility is passing the Dictionary Key as a Variant to the encoding classes to examine if any performance improvements. 
-
-Possible updates may occur to the TypeSafeArray.bas when expanded for other other projects requirements and maybe the dictionary TextEncoding class could be renamed more appropriately to avoid confusion with similar classes. 
- 
 From the initial release have improved the performance of processing case-senstive string keys by appropriately 20% and there are now limited opportunities for future performance improvements.  Any suggestions for performance improvements or issues are highly welcomed.
+
+Also testing is required on the Mac platform and VBA 6 which I'm unable to test. 
