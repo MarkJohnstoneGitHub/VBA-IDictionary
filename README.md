@@ -110,9 +110,9 @@ On Windows if both compiler constants are set to False the Dictionary.Create use
 
 The VBA-IDictionary provides interfaces for the dictionary implementations provided, allowing for the easy transition when switching between dictionary implementations.  i.e. It allows for programming to an interface instead to a particular implementation which can be advantageous for unit testing etc.
 
-Added support for keys of LongLong data type which is only availablue using the DictionaryKeyVluePair.cls IDictionary implementation and compatibile with VBA 7.  This also allows using LongPtr as keys as they are converted to LongLong or Long data types for earlier versions.
+Added support for keys of LongLong data type which is only availablue using the DictionaryKeyVluePair.cls IScriptingDictionary implementation and compatibile with VBA 7.  This also allows using LongPtr as keys as they are converted to the LongLong or Long data type for VB6.
 
-Significant performance compared to other VBA dictionary implementations, and in some scenerios provides a significant performance over the Scripting.Dictionary. 
+Significant performance compared to other VBA dictionary implementations, and in some scenerios provides a significant performance over the MS Runtime Scripting.Dictionary. 
 
 
 ## Performance
@@ -140,7 +140,7 @@ As always it's a matter of selecting the appropriate data structure for your req
 ## Testing
 Unit testing can be found in TestModuleDictionaryKeyValuePair.bas within the Ms Access database provided.  The VBA Addin [Rubberduck](http://rubberduckvba.com/) is required to run the unit testing. 
 
-Only tested on the Windows platform and would be appreciated if anyone can test it on the Mac platform. I don't anticipate any compatiblity issues if the compiler constants are appropriately set.
+Only tested on the Windows platform VBA 7 and would be appreciated if anyone can test it on the Mac platform and for VB6. I don't anticipate any compatiblity issues if the compiler constants are appropriately set.
 
 ## Notes
 
@@ -166,9 +166,9 @@ Added TypeSafeArray.bas
   - Updated: [ManagedCharSafeArray.cls](https://github.com/MarkJohnstoneGitHub/VBA-IDictionary/blob/master/scr/ManagedCharSafeArray.cls)
   
 
-MangedCharSafeArray was restructured to more appropriately associate the managed Char array with its SafeArray descriptor allocated. This was to ensure only that the SafeArray descriptor is allocated to only one managed Char array at a time.
+MangedCharSafeArray was restructured to more appropriately associate a managed Char array with its SafeArray descriptor allocated. This was to ensure that the SafeArray descriptor is allocated to only one managed Char array at a time.
   
-  - Updated to predeclared class and added a Create method. ie. 
+  - Updated to predeclared class and added a Create method. 
  
     Public Function Create(ByRef outCharsArray() As Integer) As ManagedCharSafeArray
 
@@ -181,4 +181,4 @@ From the initial release have improved the performance of processing case-sensti
 
 Also testing is required on the Mac platform and VBA 6 which I'm unable to test. 
 
-In a separate project will aim to extend the Dictionary project with an IList and/or ICollection interface. 
+In a separate project will aim to extend the VBA-IDictionary project with an IList and/or ICollection interface. 
