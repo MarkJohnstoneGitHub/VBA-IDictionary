@@ -180,3 +180,5 @@ MangedCharSafeArray was restructured to more appropriately associate the managed
 From the initial release have improved the performance of processing case-senstive string keys by appropriately 20% and there are now limited opportunities for future performance improvements.  Any suggestions for performance improvements or issues are highly welcomed.
 
 Also testing is required on the Mac platform and VBA 6 which I'm unable to test. 
+
+In a separate project will aim to extend the Dictionary project with an IList and/or ICollection interface. 
