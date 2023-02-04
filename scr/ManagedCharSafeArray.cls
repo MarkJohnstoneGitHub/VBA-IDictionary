@@ -16,11 +16,11 @@ Attribute VB_Description = "Creates a SafeArray descriptor to be associated with
 ''
 
 ''
-'@Version VBA-IScriptingDictionary v2.1 (September 02, 2019)
+'@Version VBA-IScriptingDictionary v2.1 (February 05, 2023)
 '(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary
 '@Description Creates a managed Char Array where a specified string is overlayed into the SafeArray.pvData
 '@Author Mark Johnstone markjohnstone@hotmail.com
-'@LastModified September 07, 2019
+'@LastModified February 05, 2023
 '@Dependencies
 '   TypeSafeArray.bas
 '
@@ -130,7 +130,7 @@ Private Const SIZEOF_VBA_INTEGER As Long = 2
              ByVal size As Long) _
              As LongPtr
   #Else
-    Private Declare Function CopyMemoryByPtr Lib "libc.dylib" Alias "memmove" _
+    Private Declare Function CopyAnyToMemory Lib "libc.dylib" Alias "memmove" _
             (ByVal destination As Long, _
              ByVal source As Any, _
              ByVal size As Long) _
