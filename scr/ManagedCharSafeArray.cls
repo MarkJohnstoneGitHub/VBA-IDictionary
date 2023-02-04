@@ -7,12 +7,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Attribute VB_Description = "Creates a SafeArray descriptor to be associated with a managed array of characters represented by an Integer array of Unicode values. \r\n\r\nVBA-IDictionary v2.1 (September 02, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
+Attribute VB_Description = "Creates a SafeArray descriptor to be associated with a managed array of characters represented by an Integer array of Unicode values. \r\n\r\nVBA-IDictionary v2.2 (February 05, 2023)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
 ''
 'Rubberduck annotations
+'@ModuleDescription "Creates a SafeArray descriptor to be associated with a managed array of characters represented by an Integer array of Unicode values. \r\n\r\nVBA-IDictionary v2.2 (February 05, 2023)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
 '@Folder("VBA-IScriptingDictionary.Data Types.SafeArray")
 '@PredeclaredId
-'@ModuleDescription "Creates a SafeArray descriptor to be associated with a managed array of characters represented by an Integer array of Unicode values. \r\n\r\nVBA-IDictionary v2.1 (September 02, 2019)\r\n(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary\r\nAuthor: markjohnstone@hotmail.com\r\n"
 ''
 
 ''
