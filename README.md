@@ -1,4 +1,4 @@
-# VBA-IDictionary v2.1 (September 03, 2019)
+# VBA-IDictionary v2.2 (February 05, 2023)
 
 VBA dictionary alternative to the [Scripting.Dictionary](https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/dictionary-object) which is Mac compatible which implements a IScriptingDictionary interface to allow for various dictionary implementations. 
 
@@ -175,6 +175,9 @@ MangedCharSafeArray was restructured to more appropriately associate a managed C
   - The Get Property was removed and a replace with the method:
  
     Public Sub SafeArrayAllocateToCharArray(ByRef outManagedChars() As Integer)
+    
+## Version 2.2 Modifications February 05, 2023
+  - Updated: Mac 32 CopyAnyToMemory was incorrectly named CopyMemoryByPtr 
     
  ## Future Modifications
 From the initial release have improved the performance of processing case-senstive string keys by appropriately 20% and there are now limited opportunities for future performance improvements.  Any suggestions for performance improvements or issues are highly welcomed.
