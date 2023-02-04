@@ -16,7 +16,7 @@ Attribute VB_Description = "Creates a SafeArray descriptor to be associated with
 ''
 
 ''
-'@Version VBA-IScriptingDictionary v2.1 (February 05, 2023)
+'@Version VBA-IScriptingDictionary v2.2 (February 05, 2023)
 '(c) Mark Johnstone - https://github.com/MarkJohnstoneGitHub/VBA-IDictionary
 '@Description Creates a managed Char Array where a specified string is overlayed into the SafeArray.pvData
 '@Author Mark Johnstone markjohnstone@hotmail.com
